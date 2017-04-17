@@ -74,123 +74,76 @@ if(file_exists($file))
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Welcome to CodeIgniter</title>
-
-	<style type="text/css">
-
-	::selection { background-color: #f07746; color: #fff; }
-	::-moz-selection { background-color: #f07746; color: #fff; }
-
-	body {
-		background-color: #fff;
-		margin: 40px auto;
-		max-width: 1024px;
-		font: 16px/24px normal "Helvetica Neue",Helvetica,Arial,sans-serif;
-		color: #808080;
-	}
-
-	a {
-		color: #dd4814;
-		background-color: transparent;
-		font-weight: normal;
-		text-decoration: none;
-	}
-
-	a:hover {
-	   color: #97310e;
-	}
-
-	h1 {
-		color: #fff;
-		background-color: #dd4814;
-		border-bottom: 1px solid #d0d0d0;
-		font-size: 22px;
-		font-weight: bold;
-		margin: 0 0 14px 0;
-		padding: 5px 10px;
-		line-height: 40px;
-	}
-
-	h1 img {
-		display: block;
-	}
-
-	h2 {
-		color:#404040;
-		margin:0;
-		padding:0 0 10px 0;
-	}
-
-	code {
-		font-family: Consolas, Monaco, Courier New, Courier, monospace;
-		font-size: 13px;
-		background-color: #f5f5f5;
-		border: 1px solid #e3e3e3;
-		border-radius: 4px;
-		color: #002166;
-		display: block;
-		margin: 14px 0 14px 0;
-		padding: 12px 10px 12px 10px;
-	}
-
-	#body {
-		margin: 0 15px 0 15px;
-		min-height: 96px;
-	}
-
-	p {
-		 margin: 0 0 10px;
-		 padding:0;
-	}
-
-	p.footer {
-		text-align: right;
-		font-size: 12px;
-		border-top: 1px solid #d0d0d0;
-		line-height: 32px;
-		padding: 0 10px 0 10px;
-		margin: 20px 0 0 0;
-		background:#8ba8af;
-		color:#fff;
-	}
-
-	#container {
-		margin: 10px;
-		border: 1px solid #d0d0d0;
-		box-shadow: 0 0 8px #d0d0d0;
-		border-radius: 4px;
-	}
-	</style>
+	<title>CI MONSTER</title>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css">
+	
 </head>
 <body>
-	<div id="container">
-		<h1>
-			CI-MONSTER
-		</h1>
+	<div class="container">
+		<h1>			CI-MONSTER 		</h1>
+		<div class="row">
+			<div class="col-lg-6 ">
+				<form method="post" class="form-horizontal">
+				  <fieldset>
+					    <legend>Change Globals Data</legend>
 
-		<div id="body">
-			<p>The page you are looking at is being generated dynamically by CodeIgniter.</p>
+					    <div class="form-group">
+					      <label for="url" class="col-md-3">BASE URL</label>
+					      <div class="col-md-9">
+						      <input type="text" class="form-control" name="url" id="urlname" aria-describedby="urlname_help">
+						      <small id="urlname_help" class="form-text text-muted">Ussually not need modify that.</small>
+					      </div>
+					    </div>
 
-			<p>If you would like to edit this page you'll find it located at:</p>
-			<code>application/views/welcome_message.php</code>
+					    <div class="form-group">
+					      <label for="appname"  class="col-md-3">APP NAME</label>
+					      <div class="col-md-9">
+						      <input type="text" class="form-control" name="appname"  aria-describedby="appname_help">
+						      <small id="appname_help" class="form-text text-muted">The principal name used for the app.</small>
+						  </div>
+					    </div>
 
-			<p>The corresponding controller for this page is found at:</p>
-			<code>application/controllers/Welcome.php</code>
+					    <div class="form-group">
+					      <label for="database" class="col-md-3">DB NAME</label>
+   					      <div class="col-md-9">
+						      <input type="text" class="form-control" name="database"  aria-describedby="dbname_help">
+						      <small id="dbname_help" class="form-text text-muted">Please include de pre-name like user_database.</small>
+						    </div>
+					    </div>
 
-			<p>If you are exploring CodeIgniter for the very first time, you should start by reading the <a href="user_guide/">User Guide</a>.</p>
+					    <div class="form-group">
+					      <label for="user" class="col-md-3">USER NAME</label>
+					      <div class="col-md-9">
+						      <input type="text" class="form-control" name="user"  aria-describedby="user_help">
+						      <small id="user_help" class="form-text text-muted">The username of the database.</small>
+						    </div>
+					    </div>
+
+					    <div class="form-group">
+					      <label for="mbarete" class="col-md-3">PASSWORD</label>
+					      <div class="col-md-9">
+						      <input type="password" class="form-control" name="mbarete"  aria-describedby="mbarete_help">
+						      <small id="mbarete_help" class="form-text text-muted">The user's password.</small>
+						    </div>
+					    </div>
+
+					    <div class="form-group">
+					      <label class="col-md-3" >PASSWORD</label>
+					      <div class="col-md-9">
+						      <input type="password" class="form-control"   aria-describedby="re_help">
+						      <small id="re_help" class="form-text text-muted">Please re password.</small>
+						    </div>
+					    </div>
+
+					    <button type="submit" class="btn btn-primary" name="beginnow">Submit</button>
+				    </fieldset>
+				</form>
+			</div>
 		</div>
 
-		<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
+
 	</div>
 
-<form method="post" style="font-family: courier;">
-	BASEURL &nbsp;<input type="text" name="url" id=	"urlname" style="width:400px"><br><br>
-	APPNAME &nbsp;<input type="text" name="appname" required="required"><br><br>
-	DB-NAME &nbsp;<input type="text" name="database" required="required"><br><br>
-	USERNAME&nbsp;<input type="text" name="user" required="required"><br><br>
-	PASSWORD&nbsp;<input type="text" name="mbarete"><br><br>
-	BEGINNOW&nbsp;<input type="submit" name="beginnow"><br><br>
-</form>
 <script>
 	var currentLocation = window.location;
 	document.getElementById("urlname").value = currentLocation;
