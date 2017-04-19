@@ -128,7 +128,7 @@ if(file_exists($file))
 					    </div>
 
 					    <div class="form-group">
-					      <label class="col-md-3" >PASSWORD</label>
+					      <label class="col-md-3" >REPASSWORD</label>
 					      <div class="col-md-9">
 						      <input type="password" class="form-control"   aria-describedby="re_help">
 						      <small id="re_help" class="form-text text-muted">Please re password.</small>
