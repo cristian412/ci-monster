@@ -90,7 +90,7 @@ if(file_exists($file))
 			<div class="col-lg-6 ">
 				<form method="post" class="form-horizontal">
 				  <fieldset>
-					    <legend>Change Globals Data</legend>
+					    <legend>Set Globals Data</legend>
 
 					    <div class="form-group">
 					      <label for="url" class="col-md-3">BASE URL</label>
