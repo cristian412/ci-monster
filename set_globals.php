@@ -36,16 +36,21 @@ if(!empty($_POST)){
 	$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/Request_model.php");
 	$path   = FCPATH.'application/models/Request_model.php';
 	if ( ! write_file($path, $data) ) $re.= 'ERROR WRITING models/Peticiones_model.php<br>';
+	chmod($path, 0777);
+
 
 	# Tables_model
 	$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/Tables_model.php");
 	$path   = FCPATH.'application/models/Tables_model.php';
 	if( ! write_file($path, $data) )  $re.= 'ERROR WRITING models/Tables_model.php<br>';
+	chmod($path, 0777);
+
 
 	# showhtml_helper
 	$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/showhtml_helper.php");
 	$path   = FCPATH.'application/helpers/showhtml_helper.php';
 	if( ! write_file($path, $data) ) $re.='ERROR WRITING helpers/showhtml_helper.php<br>';
+	chmod($path, 0777);
 
 
 	# HACEMOS UNA PETICION
