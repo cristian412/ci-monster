@@ -3,14 +3,11 @@ $data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-mons
 $path   = FCPATH.'application/views/welcome_message.php';
 $re = '';
 if( ! write_file($path, $data) ) 
-	$re.='
-	<div class="alert alert-dismissible alert-danger">
-	  <button type="button" class="close" data-dismiss="alert">&times;</button>
-	  <strong>ERROR WRITING </strong> <code> config/database.php </code> 
-	  <p> type in your terminal: <code> sudo chmod -R 0777 ./application </code>  in your project folder.</p>
-	</div>
-	<br>
-	'; 
+	$re.=   '<div class="alert alert-dismissible alert-danger">
+			  <button type="button" class="close" data-dismiss="alert">&times;</button>
+			  <strong>ERROR WRITING </strong> <code> config/database.php </code> 
+			  <p> type in your terminal: <code> sudo chmod -R 0777 ./application </code>  in your project folder.</p>
+			</div><br>'; 
 ?>
 <!DOCTYPE html>
 <html>
