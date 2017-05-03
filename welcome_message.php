@@ -13,12 +13,24 @@ if( ! write_file($path, $data) )
 <html>
 <head>
 	<title>CI MONSTER</title>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css">
 </head>
 <body>
 	<div class="container">
 		<br>
 		<?=$re?>
+		<div class="row">
+			<div class="col-md-2"><span class="text-primary">Init</span></div>
+			<div class="col-md-2"><span class="text-muted">Globals</span></div>
+			<div class="col-md-2"><span class="text-muted">Connection</span></div>
+			<div class="col-md-2"><span class="text-muted">Users</span></div>
+			<div class="col-md-2"><span class="text-muted">Layout</span></div>
+			<div class="col-md-2"><span class="text-muted">Sign In</span></div>
+		</div>
+		<div class="progress progress-striped active">
+		  <div class="progress-bar progress-bar-info" style="width: 12%"></div>
+		</div>
+		<br>
 		<div class="jumbotron">
 		 <h1>CI MONSTER</h1>
 		 	<p>powerfull backend, based in codeigniter framework </p>
