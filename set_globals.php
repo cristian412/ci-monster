@@ -3,68 +3,97 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $this->load->helper('file');
 
-
-if(!empty($_POST)){
+	$menu = '
+			<div class="col-md-2"><span class="text-primary">Init</span></div>
+			<div class="col-md-2"><span class="text-primary">Globals</span></div>
+			<div class="col-md-2"><span class="text-muted">Connection</span></div>
+			<div class="col-md-2"><span class="text-muted">Users</span></div>
+			<div class="col-md-2"><span class="text-muted">Layout</span></div>
+			<div class="col-md-2"><span class="text-muted">Sign In</span></div>
+	';
+	$pb = 12;
+	$form_hidden = '';
+	$connection_hidden = ' hidden ';
 	$re = '';
 
+if(!empty($_POST)){
+	
 	# SETEAR VARIABLES GLOBALES
-	echo "<pre>"; print_r($_POST); echo "</pre>";
 	foreach ($_POST as $key => $value) $$key = $value;
 
-	# CONFIG.PHP
-	$var  = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/config_config.php");
-	$a = array("URL_VAR", "APPNAME_VAR", "DATABASE_VAR","USER_VAR","MBARETE_VAR");
-	$path = FCPATH."application/config/config.php";
-	$data = file_get_contents($path);
-	$b = array($url, $appname, $database, $user, $mbarete );
-	$var = str_replace($a, $b, $var);
-	$data = $data.$var;
-	if( ! write_file($path, $data) ) $re.='ERROR WRITING config/config.php<br>'; 
+	if(isset($connection)):
+		# HACEMOS UNA PETICION
+		$r = $this-> Request_model -> peticion("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = '".DATABASE."'");
+		if($r!=false){
 
-	# DATABASE.PHP
-	$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/config_database.php");
-	$path   = FCPATH.'application/config/database.php';
-	if( ! write_file($path, $data) ) $re.='ERROR WRITING config/database.php<br>'; 
+		}
+		echo "<pre>"; print_r($r); 		echo "</pre>";	
+	endif;
 
+	if(isset($url)):
+		$menu = '
+				<div class="col-md-2"><span class="text-primary">Init</span></div>
+				<div class="col-md-2"><span class="text-primary">Globals</span></div>
+				<div class="col-md-2"><span class="text-primary">Connection</span></div>
+				<div class="col-md-2"><span class="text-muted">Users</span></div>
+				<div class="col-md-2"><span class="text-muted">Layout</span></div>
+				<div class="col-md-2"><span class="text-muted">Sign In</span></div>
+		';
+		$pb = 45;
+		$form_hidden = ' hidden ';
+		$connection_hidden = '';
 
-	# AUTOLOAD.PHP
-	$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/autoload.php");
-	$path   = FCPATH.'application/config/autoload.php';
-	if( ! write_file($path, $data) ) $re.='ERROR WRITING config/autoload.php<br>'; 
+		# CONFIG.PHP
+		$var  = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/config_config.php");
+		$a = array("URL_VAR", "APPNAME_VAR", "DATABASE_VAR","USER_VAR","MBARETE_VAR");
+		$path = FCPATH."application/config/config.php";
+		$data = file_get_contents($path);
+		$b = array($url, $appname, $database, $user, $mbarete );
+		$var = str_replace($a, $b, $var);
+		$data = $data.$var;
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING config/config.php<br>'; 
 
-	# Peticiones_model
-	$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/Request_model.php");
-	$path   = FCPATH.'application/models/Request_model.php';
-	if ( ! write_file($path, $data) ) $re.= 'ERROR WRITING models/Peticiones_model.php<br>';
-	chmod($path, 0777);
-
-
-	# Tables_model
-	$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/Tables_model.php");
-	$path   = FCPATH.'application/models/Tables_model.php';
-	if( ! write_file($path, $data) )  $re.= 'ERROR WRITING models/Tables_model.php<br>';
-	chmod($path, 0777);
-
-
-	# showhtml_helper
-	$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/showhtml_helper.php");
-	$path   = FCPATH.'application/helpers/showhtml_helper.php';
-	if( ! write_file($path, $data) ) $re.='ERROR WRITING helpers/showhtml_helper.php<br>';
-	chmod($path, 0777);
+		# DATABASE.PHP
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/config_database.php");
+		$path   = FCPATH.'application/config/database.php';
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING config/database.php<br>'; 
 
 
-	# HACEMOS UNA PETICION
-	//$r = $this-> Request_model -> peticion("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = '".DATABASE."'");
-	//echo "<pre>"; print_r($r); 		echo "</pre>";	
+		# AUTOLOAD.PHP
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/autoload.php");
+		$path   = FCPATH.'application/config/autoload.php';
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING config/autoload.php<br>'; 
+
+		# Peticiones_model
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/Request_model.php");
+		$path   = FCPATH.'application/models/Request_model.php';
+		if ( ! write_file($path, $data) ) $re.= 'ERROR WRITING models/Peticiones_model.php<br>';
+		chmod($path, 0777);
 
 
-	# CARGAMOS EL PRIMER ARCHIVO EN LA VISTA, DESDE GITHUB
-	$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/holamundo.html");
-	$path   = FCPATH.'application/views/holamundo.html';
-	write_file($path, $data);
-	chmod($path, 0777);
+		# Tables_model
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/Tables_model.php");
+		$path   = FCPATH.'application/models/Tables_model.php';
+		if( ! write_file($path, $data) )  $re.= 'ERROR WRITING models/Tables_model.php<br>';
+		chmod($path, 0777);
 
-	echo "<br>Respuesta: ".$re;
+
+		# showhtml_helper
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/showhtml_helper.php");
+		$path   = FCPATH.'application/helpers/showhtml_helper.php';
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING helpers/showhtml_helper.php<br>';
+		chmod($path, 0777);
+
+
+		# CARGAMOS EL PRIMER ARCHIVO EN LA VISTA, DESDE GITHUB
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/holamundo.html");
+		$path   = FCPATH.'application/views/holamundo.html';
+		write_file($path, $data);
+		chmod($path, 0777);
+
+		if($re!='')	$re.='<div class="alert alert-dismissible alert-danger">'.$re.'</div>';
+
+	endif; // end if beginnow
 
 } // end IF !EMPTHY POST
 
@@ -81,13 +110,31 @@ if(file_exists($file))
 	<meta charset="utf-8">
 	<title>CI MONSTER</title>
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css">
-	
+	<style>
+		.hidden {
+			display: none;
+		}
+	</style>
 </head>
 <body>
 	<div class="container">
-		<h1>			CI-MONSTER 		</h1>
+		<br>
 		<div class="row">
-			<div class="col-lg-6 ">
+			<?=$re?>
+			<?=$menu?>
+		</div>
+		<div class="progress progress-striped active">
+		  <div class="progress-bar progress-bar-info" style="width: <?=$pb?>%"></div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-lg-6"<?=$connection_hidden?> >
+				<?php echo "<pre>"; print_r($_POST); echo "</pre>";?>
+				<form method="post">
+					<button type="submit" class="btn btn-success" value="connection">Try connection</button>
+				</form>
+			</div>
+			<div class="col-lg-6 <?=$form_hidden?>">
 				<form method="post" class="form-horizontal">
 				  <fieldset>
 					    <legend>Set Globals Data</legend>
