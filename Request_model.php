@@ -8,7 +8,7 @@ class Request_model extends CI_Model {
 		$this->load->database();
 	}
 	public function peticion($orden){
-		if( stristr($orden, 'update') or stristr($orden, 'insert') ){
+		if( stristr($orden, 'update') or stristr($orden, 'insert')  or stristr($orden, 'create') ){
 			$q = $this->db->query($orden);
 			return $q;			
 
