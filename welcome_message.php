@@ -34,7 +34,7 @@ if( ! write_file($path, $data) )
 		<div class="jumbotron">
 		 <h1>CI MONSTER</h1>
 		 	<p>powerfull backend, based in codeigniter framework </p>
-		 	<p><a class="btn btn-primary btn-lg" href="<?=URL?>">Go!</a></p>
+		 	<p><a class="btn btn-primary btn-lg" onclick="location.reload(true)">Go!</a></p>
 		</div>
 	</div>
 </body>
