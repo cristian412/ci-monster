@@ -203,31 +203,31 @@ if(file_exists($file))
 
 		<br>
 		<div class="row">
-			<div class="col-lg-6"<?=$signin_hidden?> >
+			<div class="col-lg-6 <?=$signin_hidden?> " >
 				<?php echo "<pre>"; print_r($_POST); echo "</pre>"; ?>
-				<a href="<?=URL?>" class="btn btn-info"> Sign In</a>
+				<a href="#" class="btn btn-info"> Sign In</a>
 			</div>
-			<div class="col-lg-6"<?=$layout_hidden?> >
+			<div class="col-lg-6 <?=$layout_hidden?>" >
 				<?php echo "<pre>"; print_r($_POST); echo "</pre>"; ?>
 
 				<form method="post">
 					<button type="submit" class="btn btn-success" name="layout" value="true">Create Layout</button>
 				</form>
 			</div>
-			<div class="col-lg-6"<?=$connection_hidden?> >
+			<div class="col-lg-6 <?=$connection_hidden?> " >
 				<?php echo "<pre>"; print_r($_POST); echo "</pre>"; ?>
 
 				<form method="post">
 					<button type="submit" class="btn btn-success" name="connection" value="true">Try connection</button>
 				</form>
 			</div>
-			<div class="col-lg-6"<?=$users_hidden?> >
+			<div class="col-lg-6 <?=$users_hidden?> " >
 				<?=$connection_res?>
 				<form method="post">
 					<button type="submit" class="btn btn-success" name="users" value="true">Create Users Table</button>
 				</form>
 			</div>
-			<div class="col-lg-6 <?=$form_hidden?>">
+			<div class="col-lg-6 <?=$form_hidden?>" >
 				<?=$connection_res?>
 				<form method="post" class="form-horizontal">
 				  <fieldset>
