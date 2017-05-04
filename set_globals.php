@@ -3,43 +3,117 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $this->load->helper('file');
 
-	$menu = '
-			<div class="col-md-2"><span class="text-primary">Init</span></div>
-			<div class="col-md-2"><span class="text-primary">Globals</span></div>
-			<div class="col-md-2"><span class="text-muted">Connection</span></div>
-			<div class="col-md-2"><span class="text-muted">Users</span></div>
-			<div class="col-md-2"><span class="text-muted">Layout</span></div>
-			<div class="col-md-2"><span class="text-muted">Sign In</span></div>
+function menu($step){
+
+	$s2 = $s3 = $s4 = $s5 = $s6 = ' text-muted ';
+
+	if($step==2) $s2 = ' text-primary ';
+	if($step==3) $s2 = $s3 = ' text-primary ';
+	if($step==4) $s2 = $s3 = $s4 = ' text-primary ';
+	if($step==5) $s2 = $s3 = $s4 = $s5 = ' text-primary ';
+	if($step==6) $s2 = $s3 = $s4 = $s5 = $s6 = ' text-primary ';
+
+	if($step==2) $pb = 25;
+	if($step==3) $pb = 45;
+	if($step==4) $pb = 60;
+	if($step==5) $pb = 75;
+	if($step==6) $pb = 100;
+
+	return $menu = ' 
+			<div class="row">
+				<div class="col-md-2"><span class="text-primary">Init</span></div>
+				<div class="col-md-2"><span class="'.$s2.'">Globals</span></div>
+				<div class="col-md-2"><span class="'.$s3.'">Connection</span></div>
+				<div class="col-md-2"><span class="'.$s4.'">Users</span></div>
+				<div class="col-md-2"><span class="'.$s5.'">Layout</span></div>
+				<div class="col-md-2"><span class="'.$s6.'">Sign In</span></div>
+			</div>
+			<div class="progress progress-striped active">
+			  <div class="progress-bar progress-bar-info" style="width: '.$pb.'%"></div>
+			</div>
 	';
-	$pb = 12;
-	$form_hidden = '';
-	$connection_hidden = ' hidden ';
-	$re = '';
+}
+
+$menu = menu(2);
+
+$form_hidden = '';
+$connection_hidden = ' hidden ';
+$users_hidden = ' hidden ';
+$layout_hidden = ' hidden ';
+$signin_hidden = ' hidden ';
+$connection_res = '  ';
+$re = '';
 
 if(!empty($_POST)){
+
 	
 	# SETEAR VARIABLES GLOBALES
 	foreach ($_POST as $key => $value) $$key = $value;
 
-	if(isset($connection)):
-		# HACEMOS UNA PETICION
-		$r = $this-> Request_model -> peticion("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = '".DATABASE."'");
-		if($r!=false){
+	# LAYOUT
+	if(isset($layout)):
+		$menu = menu(6);
+		$form_hidden = ' hidden ';
+		$signin_hidden = '';
 
+	endif;
+	# USERS
+	if(isset($users)):
+		$menu = menu(4);
+
+		$form_hidden = ' hidden ';
+		$connection_hidden = ' hidden ';
+
+		$r = $this-> Request_model -> peticion("
+			CREATE TABLE IF NOT EXISTS users 
+			( id_users INT(10) PRIMARY KEY AUTO_INCREMENT, 
+			username VARCHAR(255), 
+			password VARCHAR(255) ) ENGINE = InnoDB") ;
+
+		$q = "INSERT INTO users(`id_users`,`username`,`password`) 
+				SELECT '1','admin','admin'  
+				WHERE NOT EXISTS ( SELECT * FROM users ) ";
+        $r = $this-> Request_model -> peticion($q);
+
+		if($r!=false){
+			$menu = menu(5);
+			$connection_res = "<h1>Successfully Created</h1>";
+			$connection_hidden = ' hidden ';
+			$users_hidden = ' hidden ';
+			$layout_hidden = ' ';
+
+
+		}else{
+			$menu = menu(3);
+			$connection_res = "<h1>Connection Error</h1>";
 		}
-		echo "<pre>"; print_r($r); 		echo "</pre>";	
 	endif;
 
+	# CONNECTIONS
+	if(isset($connection)):
+		$menu = menu(3);
+
+		$form_hidden = ' hidden ';
+		$connection_hidden = '';
+
+		$r = $this-> Request_model -> peticion("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = '".DATABASE."'");
+		if($r!=false){
+			$menu = menu(4);
+			$connection_res = "<h1>Connection Successfull</h1>";
+			$connection_hidden = ' hidden ';
+			$users_hidden = ' ';
+
+
+		}else{
+			$menu = menu(2);
+			$connection_res = "<h1>Connection Error</h1>";
+		}
+	endif;
+
+	# URL
 	if(isset($url)):
-		$menu = '
-				<div class="col-md-2"><span class="text-primary">Init</span></div>
-				<div class="col-md-2"><span class="text-primary">Globals</span></div>
-				<div class="col-md-2"><span class="text-primary">Connection</span></div>
-				<div class="col-md-2"><span class="text-muted">Users</span></div>
-				<div class="col-md-2"><span class="text-muted">Layout</span></div>
-				<div class="col-md-2"><span class="text-muted">Sign In</span></div>
-		';
-		$pb = 45;
+		$menu = menu(3);
+
 		$form_hidden = ' hidden ';
 		$connection_hidden = '';
 
@@ -104,7 +178,10 @@ $file = FCPATH."application/views/tables/users/list.php";
 if(file_exists($file))
 
 
-?><!DOCTYPE html>
+?>
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
@@ -123,18 +200,35 @@ if(file_exists($file))
 			<?=$re?>
 			<?=$menu?>
 		</div>
-		<div class="progress progress-striped active">
-		  <div class="progress-bar progress-bar-info" style="width: <?=$pb?>%"></div>
-		</div>
+
 		<br>
 		<div class="row">
-			<div class="col-lg-6"<?=$connection_hidden?> >
-				<?php echo "<pre>"; print_r($_POST); echo "</pre>";?>
+			<div class="col-lg-6"<?=$signin_hidden?> >
+				<?php echo "<pre>"; print_r($_POST); echo "</pre>"; ?>
+				<a href="<?=URL?>" class="btn btn-info"> Sign In</a>
+			</div>
+			<div class="col-lg-6"<?=$layout_hidden?> >
+				<?php echo "<pre>"; print_r($_POST); echo "</pre>"; ?>
+
 				<form method="post">
-					<button type="submit" class="btn btn-success" value="connection">Try connection</button>
+					<button type="submit" class="btn btn-success" name="layout" value="true">Create Layout</button>
+				</form>
+			</div>
+			<div class="col-lg-6"<?=$connection_hidden?> >
+				<?php echo "<pre>"; print_r($_POST); echo "</pre>"; ?>
+
+				<form method="post">
+					<button type="submit" class="btn btn-success" name="connection" value="true">Try connection</button>
+				</form>
+			</div>
+			<div class="col-lg-6"<?=$users_hidden?> >
+				<?=$connection_res?>
+				<form method="post">
+					<button type="submit" class="btn btn-success" name="users" value="true">Create Users Table</button>
 				</form>
 			</div>
 			<div class="col-lg-6 <?=$form_hidden?>">
+				<?=$connection_res?>
 				<form method="post" class="form-horizontal">
 				  <fieldset>
 					    <legend>Set Globals Data</legend>
