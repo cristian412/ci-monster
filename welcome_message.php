@@ -1,4 +1,6 @@
 <?php
+$this->load->helper('file');
+
 $data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/set_globals.php");
 $path   = FCPATH.'application/views/welcome_message.php';
 $re = '';
