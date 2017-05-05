@@ -107,6 +107,12 @@ if(!empty($_POST)){
 		$path   = FCPATH.'.htaccess';
 		if( ! write_file($path, $data) ) $re.='ERROR WRITING htaccess'.$path.'<br>';
 
+		// HOME CONTROLLER
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/controllers_users.php");
+		$path   = FCPATH.'application/controllers/Users.php';
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING '.$path.'<br>';
+		chmod($path, 0777);
+
 		# views/users/sign_in.php
 		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/views_users_sign_in.php");
 		$path   = FCPATH.'application/views/users/sign_in.php';
@@ -206,7 +212,7 @@ if(!empty($_POST)){
 
 
 		# AUTOLOAD.PHP
-		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/autoload.php");
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/config_autoload.php");
 		$path   = FCPATH.'application/config/autoload.php';
 		if( ! write_file($path, $data) ) $re.='ERROR WRITING config/autoload.php<br>'; 
 
@@ -230,12 +236,6 @@ if(!empty($_POST)){
 		if( ! write_file($path, $data) ) $re.='ERROR WRITING helpers/showhtml_helper.php<br>';
 		chmod($path, 0777);
 
-
-		# CARGAMOS EL PRIMER ARCHIVO EN LA VISTA, DESDE GITHUB
-		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/holamundo.html");
-		$path   = FCPATH.'application/views/holamundo.html';
-		write_file($path, $data);
-		chmod($path, 0777);
 
 		if($re!='')	$re.='<div class="alert alert-dismissible alert-danger">'.$re.'</div>';
 
