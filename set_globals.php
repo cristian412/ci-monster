@@ -58,12 +58,6 @@ if(!empty($_POST)){
 
 		######## CREATE FOLDERS #########
 
-		// create folder users
-		$path   = FCPATH.'application/views/users';
-		if(!is_dir($path)){ 
-			mkdir($path, 0777, true);
-			chmod($path, 0777);
-		}
 		// create folder layout
 		$path   = FCPATH.'application/views/layout';
 		if(!is_dir($path)){ 
@@ -106,6 +100,7 @@ if(!empty($_POST)){
 		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/.htaccess");
 		$path   = FCPATH.'.htaccess';
 		if( ! write_file($path, $data) ) $re.='ERROR WRITING htaccess'.$path.'<br>';
+		chmod($path, 0777);
 
 		// HOME CONTROLLER
 		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/controllers_users.php");
@@ -115,17 +110,17 @@ if(!empty($_POST)){
 
 		# views/users/sign_in.php
 		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/views_users_sign_in.php");
-		$path   = FCPATH.'application/views/users/sign_in.php';
+		$path   = FCPATH.'application/views/layout/adminlte/sign_in.php';
 		if( ! write_file($path, $data) ) $re.='ERROR WRITING htaccess'.$path.'<br>';
 		chmod($path, 0777);
 		# views/users/sign_up.php
 		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/views_users_sign_up.php");
-		$path   = FCPATH.'application/views/users/sign_up.php';
+		$path   = FCPATH.'application/views/layout/adminlte/sign_up.php';
 		if( ! write_file($path, $data) ) $re.='ERROR WRITING htaccess'.$path.'<br>';
 		chmod($path, 0777);
 		# views/users/sign_out.php
 		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/views_users_sign_out.php");
-		$path   = FCPATH.'application/views/users/sign_out.php';
+		$path   = FCPATH.'application/views/layout/adminlte/sign_out.php';
 		if( ! write_file($path, $data) ) $re.='ERROR WRITING htaccess'.$path.'<br>';
 		chmod($path, 0777);
 
