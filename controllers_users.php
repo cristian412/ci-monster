@@ -11,14 +11,14 @@ class Users extends CI_Controller {
 
 
 	public function index(){
-		$this->load->view('users/sign_in');
+		$this->load->view('layout/adminlte/sign_in');
 	}
 	public function sign_in(){
 		$data['message'] = '';
-		$this->load->view('users/sign_in',$data);
+		$this->load->view('layout/adminlte/sign_in',$data);
 	}
 	public function sign_up(){
-		$this->load->view('users/sign_up');
+		$this->load->view('layout/adminlte/sign_up');
 	}
 	public function sign_out(){
 		$this->session->sess_destroy();
@@ -37,7 +37,7 @@ class Users extends CI_Controller {
 			redirect( URL );
 		}else{
 			$data['message'] = 'ERROR USER OR PASSWORD WRON';
-			$this->load->view('users/sign_in',$data);
+			$this->load->view('layout/adminlte/sign_in',$data);
 		}
 	}
 	public function check_pru(){
