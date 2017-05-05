@@ -276,7 +276,7 @@ if(file_exists($file))
 			<div class="col-lg-6 <?=$signin_hidden?> " >
 				<?php echo "<pre>"; print_r($_POST); echo "</pre>"; ?>
 				<?=$re?>
-				<a href="#" class="btn btn-info"> Sign In</a>
+				<a href="<?=URL?>" class="btn btn-info"> Sign In</a>
 			</div>
 			<div class="col-lg-6 <?=$layout_hidden?>" >
 				<?php echo "<pre>"; print_r($_POST); echo "</pre>"; ?>
