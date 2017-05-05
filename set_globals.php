@@ -128,7 +128,7 @@ if(!empty($_POST)){
 		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/config_routes.php");
 		$path   = FCPATH.'application/config/routes.php';
 		if( ! write_file($path, $data) ) $re.='ERROR WRITING'.$path.'<br>';
-		chmod($path, 0777);
+
 	endif;
 	# USERS
 	if(isset($users)):
@@ -169,7 +169,7 @@ if(!empty($_POST)){
 		$form_hidden = ' hidden ';
 		$connection_hidden = '';
 
-		$r = $this-> Request_model -> peticion("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = '".DATABASE."'");
+		$r = $this-> Request_model -> peticion("SELECT count(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = '".DATABASE."'");
 		if($r!=false){
 			$menu = menu(4);
 			$connection_res = "<h1>Connection Successfull</h1>";
@@ -178,6 +178,9 @@ if(!empty($_POST)){
 
 
 		}else{
+			$form_hidden = '';
+			$connection_hidden = ' hidden ';
+
 			$menu = menu(2);
 			$connection_res = "<h1>Connection Error</h1>";
 		}
