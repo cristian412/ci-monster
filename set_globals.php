@@ -56,6 +56,78 @@ if(!empty($_POST)){
 		$form_hidden = ' hidden ';
 		$signin_hidden = '';
 
+		######## CREATE FOLDERS #########
+
+		// create folder users
+		$path   = FCPATH.'application/views/users';
+		if(!is_dir($path)){ 
+			mkdir($path, 0777, true);
+			chmod($path, 0777);
+		}
+		// create folder layout
+		$path   = FCPATH.'application/views/layout';
+		if(!is_dir($path)){ 
+			mkdir($path, 0777, true);
+			chmod($path, 0777);
+		}
+		// create folder layout/adminlte
+		$path   = FCPATH.'application/views/layout/adminlte';
+		if(!is_dir($path)){ 
+			mkdir($path, 0777, true);
+			chmod($path, 0777);
+		}
+		// create folder HOME
+		$path   = FCPATH.'application/views/home';
+		if(!is_dir($path)){ 
+			mkdir($path, 0777, true);
+			chmod($path, 0777);
+		}
+
+		######## LOAD FILES #########
+		// HOME CONTROLLER
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/controllers_home.php");
+		$path   = FCPATH.'application/controllers/Home.php';
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING '.$path.'<br>';
+		chmod($path, 0777);
+
+		// HOME VIEW
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/views_home_index.php");
+		$path   = FCPATH.'application/views/home/index.php';
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING '.$path.'<br>';
+		chmod($path, 0777);
+
+		// Layout Admin LTE
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/layout_adminlte.php");
+		$path   = FCPATH.'application/views/layout/adminlte/index.php';
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING'.$path.'<br>';
+		chmod($path, 0777);
+
+		# .htaccess
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/.htaccess");
+		$path   = FCPATH.'.htaccess';
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING htaccess'.$path.'<br>';
+
+		# views/users/sign_in.php
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/views_users_sign_in.php");
+		$path   = FCPATH.'application/views/users/sign_in.php';
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING htaccess'.$path.'<br>';
+		chmod($path, 0777);
+		# views/users/sign_up.php
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/views_users_sign_up.php");
+		$path   = FCPATH.'application/views/users/sign_up.php';
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING htaccess'.$path.'<br>';
+		chmod($path, 0777);
+		# views/users/sign_out.php
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/views_users_sign_out.php");
+		$path   = FCPATH.'application/views/users/sign_out.php';
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING htaccess'.$path.'<br>';
+		chmod($path, 0777);
+
+		# Finally change ROUTES
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/config_routes.php");
+		$path   = FCPATH.'application/config/routes.php';
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING'.$path.'<br>';
+		chmod($path, 0777);
 	endif;
 	# USERS
 	if(isset($users)):
@@ -205,6 +277,7 @@ if(file_exists($file))
 		<div class="row">
 			<div class="col-lg-6 <?=$signin_hidden?> " >
 				<?php echo "<pre>"; print_r($_POST); echo "</pre>"; ?>
+				<?=$re?>
 				<a href="#" class="btn btn-info"> Sign In</a>
 			</div>
 			<div class="col-lg-6 <?=$layout_hidden?>" >
