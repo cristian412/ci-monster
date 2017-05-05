@@ -1,3 +1,11 @@
+<?php
+if ( ! $this->session->has_userdata('id_users') ) redirect( URL.'users/sign_in' );
+
+if(!isset($yield_data)) $yield_data = '';
+if(!isset($yield_navbar)) $yield_navbar = '';
+if(!isset($yield_sidevar)) $yield_sidebar = '';
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
