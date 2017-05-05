@@ -1,0 +1,45 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class XXX extends CI_Controller {
+
+	private $tabla = 'xxx';
+	//echo "<br><br><br><br><br><br><br><pre>"; print_r($id); echo "</pre>";
+
+	public function index(){
+		$data['data']['update'] = $this -> Update_model -> update();
+		$r = $this -> Grid_model -> grid($this->tabla,'','');
+		$data['data']['tabla'] = $this->tabla;
+		$data['data']['lista'] = $r;
+		$data['yield'] = 'tabla/'.$this->tabla.'/list';
+	    $this->load->view('base/layout',$data);	
+	}
+	public function show(){
+		$id = $this->uri->segment(3);
+		$data['data']['update'] = $this -> Update_model -> update();
+		$r = $this -> Item_model -> item($this->tabla,$id);
+
+		$data['data']['lista'] = $r;
+		$data['data']['tabla'] = $this->tabla;
+		$data['data']['id'] = $id;
+		$data['yield'] = 'tabla/'.$this->tabla.'/show';
+		
+		if( empty($r) )$data['yield'] = 'base/404';
+
+		$this->load->view('base/layout',$data);
+	}
+	public function edit(){
+		$id = $this->uri->segment(3);
+		if(empty($id))
+			$id = 'new';
+		$tabla = $this->tabla;
+		$r = $this -> Form_model -> form($this->tabla, $id, URL.$this->tabla);
+		$data['data']['fields'] = $r;
+		$data['data']['tabla'] = $this->tabla;
+		$data['yield'] = 'tabla/'.$this->tabla.'/edit';
+	    $this->load->view('base/layout',$data);	
+	}
+
+}
+
+
