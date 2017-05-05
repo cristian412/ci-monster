@@ -1,9 +1,9 @@
 <?php
 if ( ! $this->session->has_userdata('id_users') ) redirect( URL.'users/sign_in' );
 
-if(!isset($yield_data)) $yield_data = '';
-if(!isset($yield_navbar)) $yield_navbar = '';
-if(!isset($yield_sidevar)) $yield_sidebar = '';
+if(!isset($yield_data)) $yield_data = '<h1>Yield Data is Empty</h1>';
+if(!isset($yield_navbar)) $yield_navbar = '<li><a href="#" data-toggle="control-sidebar"><span>YIELD_NAVBAR</span></a></li>';
+if(!isset($yield_sidevar)) $yield_sidebar = '<li> <a href="#"><i class="fa fa-th"></i> <span>YIELD_SIDEBAR</span></a>';
 
 ?>
 <!DOCTYPE html>
@@ -38,12 +38,11 @@ if(!isset($yield_sidevar)) $yield_sidebar = '';
         <span class="icon-bar"></span>
       </a>
       <ul class="nav navbar-nav">
-          <li><a href="#" data-toggle="control-sidebar"><span>YIELD_NAVBAR</span></a></li>
-
+        <?=$yield_navbar?>
       </ul>
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-          <li><a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a></li>
+          <li><a href="<?=URL?>users/sign_out" ><i class="fa fa-sing-out"></i> Sing Out</a></li>
         </ul>
       </div>
     </nav>
@@ -54,7 +53,8 @@ if(!isset($yield_sidevar)) $yield_sidebar = '';
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
           <li> <a href="#"><i class="fa fa-th"></i> <span>Option</span></a>
-          <li> <a href="#"><i class="fa fa-th"></i> <span>YIELD_SIDEBAR</span></a>
+                    <?=$yield_sidebar?>
+
         </li>
       </ul>
     </section>
@@ -62,7 +62,7 @@ if(!isset($yield_sidevar)) $yield_sidebar = '';
   <!-- =============================================== -->
   <div class="content-wrapper">
     <section class="content">
-          <h1>YIELD_DATA</h1>
+          <?=$yield_data?>
     </section><!-- /.content -->
   </div><!-- /.content-wrapper -->
   <footer class="main-footer">
