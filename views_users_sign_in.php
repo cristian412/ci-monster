@@ -1,9 +1,49 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<title></title>
+<html lang="en">
+<head> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+	<title>Admin</title>
 </head>
 <body>
-<h1>SIGN_IN</h1>
+	<div class="container">
+		<div class="row center col-md-6">
+			<div class="panel-heading">
+				<div class="panel-title text-center">
+					<h1 class="title">Company Name</h1>
+					<hr />
+				</div>
+			</div> 
+			<div class="row">
+				<?=$message?>
+			</div>
+			<div class="main-login main-center">
+				<form class="form-horizontal" method="post" action="<?=URL?>users/check">
+					<div class="form-group">
+						<label for="email" class="cols-sm-2 control-label">Email</label>
+						<div class="cols-sm-10">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+								<input type="text" class="form-control" name="user" id="email"  placeholder="Enter your Email"/>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="password" class="cols-sm-2 control-label">Password</label>
+						<div class="cols-sm-10">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+							<input type="password" class="form-control" name="pass" id="password"  placeholder="Enter your Password"/>
+						</div>
+						</div>
+					</div>
+					<div class="form-group ">
+						<button type="submit"  class="btn btn-primary btn-lg btn-block login-button">Sign In</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
