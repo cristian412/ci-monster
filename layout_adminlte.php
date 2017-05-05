@@ -42,7 +42,7 @@ if(!isset($yield_sidevar)) $yield_sidebar = '<li> <a href="#"><i class="fa fa-th
       </ul>
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-          <li><a href="<?=URL?>users/sign_out" ><i class="fa fa-sing-out"></i> Sing Out</a></li>
+          <li><a href="<?=URL?>users/sign_out" ><i class="fa fa-sign-out"></i> Sing Out</a></li>
         </ul>
       </div>
     </nav>
