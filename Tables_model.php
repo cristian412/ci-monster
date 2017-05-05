@@ -130,12 +130,17 @@ class Tables_model extends CI_Model {
       $tabla = $tablas[$i]['Tables_in_'.DATABASE];
       $Tabla = ucwords($tabla);
 
-           $path   = FCPATH.'application/views/tabla';
+           $path   = FCPATH.'application/controllers/tables';
            if(!is_dir($path)){
             mkdir($path, 0777, true);
             chmod($path, 0777);
            }
-           $path   = FCPATH.'application/views/tabla/'.$tabla;
+           $path   = FCPATH.'application/views/tables';
+           if(!is_dir($path)){
+            mkdir($path, 0777, true);
+            chmod($path, 0777);
+           }
+           $path   = FCPATH.'application/views/tables/'.$tabla;
            if(!is_dir($path)){ 
             mkdir($path, 0777, true);
             chmod($path, 0777);
@@ -145,9 +150,9 @@ class Tables_model extends CI_Model {
       foreach ($arr as $value) {
         $data = file_get_contents(FCPATH."assets/txt/".$value.".txt");
         $data = str_replace(['xxx','XXX'], [$tabla,$Tabla], $data);
-        $path = FCPATH."application/views/tabla/".$tabla."/".$value.".php";
+        $path = FCPATH."application/views/tables/".$tabla."/".$value.".php";
         if($value=='controller')
-          $path = FCPATH."application/controllers/".$Tabla.".php";
+          $path = FCPATH."application/controllers/tables/".$Tabla.".php";
         if(!file_exists($path)):
           if ( ! write_file($path, $data)){
             $re.= 'Unable to write the file'.$path.'<br>';
