@@ -1,5 +1,5 @@
 <?php
-function listaSimple($lista,$id_dom=''){
+function listaSimple($lista,$js='dataTables',$id_dom=''){
     if( isset($lista['contenido']) ){
       if($id_dom == ''){
         # id_dom
@@ -35,13 +35,14 @@ function listaSimple($lista,$id_dom=''){
     $r .= '</tbody>';
     $r .= '</table>';
     // Script DataTables
-    $r.= '
-    <script>
-    $("#grid_'.$id_dom.'").DataTable( {
-        "language": { "url":     "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json" }
-    } );
-    </script>
-    ';
+    if($js=='dataTables')
+	$r.= '
+	    <script>
+	    $("#grid_'.$id_dom.'").DataTable( {
+		"language": { "url":     "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json" }
+	    } );
+	    </script>
+	    ';
     // Empty Message
     if( count($lista['contenido']) == 0 )
       $r = '<div class="alert alert-dismissible alert-warning">
