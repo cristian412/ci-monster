@@ -1,24 +1,25 @@
 <?php
-function listaSimple($lista){
+function listaSimple($lista,$id_dom=''){
     if( isset($lista['contenido']) ){
-      # id_dom
-      next($lista['columna']); //llevamos el puntero del array al siguiente elmento
-      $a = key($lista['columna']); //obtenemos el key que necesitamos ej. id_tabla
-      $id_dom = str_replace('id_', '', $lista['columna'][$a]['name'] ); // guardamos el nombre de la tabla como $id_dom
+      if($id_dom == ''){
+        # id_dom
+        next($lista['columna']); //llevamos el puntero del array al siguiente elmento
+        $a = key($lista['columna']); //obtenemos el key que necesitamos ej. id_tabla
+        $id_dom = str_replace('id_', '', $lista['columna'][$a]['name'] ); // guardamos el nombre de la tabla como $id_dom
+      }
       // recorremos las columnas para guardar los titulos en la variable t
       foreach ($lista['columna'] as $key => $value)
         if($key!='u_id') $t[$key] = $value['label']; // se carga si no es u_id
       // guardamos el contenido en la variable c
       $c = $lista['contenido'];
     }else{
-      $id_dom = '';
       $t = $lista[0];
       $c = $lista['contenido'] = $lista;
       foreach ($t as $key) 
         $t[$key] = ucwords( str_replace('_', ' ', $key) );
     }
 
-    # EMPEZAMOS A CREAR LA TABLA
+    // empieza a crear la tabla  
     $r = '<table id="grid_'.$id_dom.'" class="table table-striped table-hover table-bordered table-responsive">';
     // Table head
     $r.= '<thead class="thead-inverse">';
