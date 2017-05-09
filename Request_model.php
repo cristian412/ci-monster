@@ -7,6 +7,10 @@ class Request_model extends CI_Model {
 		parent::__construct();
 		$this->load->database();
 	}
+
+
+
+
 	public function peticion($orden){
 		if( stristr($orden, 'update') or stristr($orden, 'insert')  or stristr($orden, 'create') ){
 			$q = $this->db->query($orden);
@@ -18,6 +22,10 @@ class Request_model extends CI_Model {
 			return $result;			
 		}
 	}
+
+
+
+
 	public function last($tabla){
 		$u = $this->session->userdata('u');
 		if(empty($u)) return;
@@ -31,6 +39,20 @@ class Request_model extends CI_Model {
 
 		return $result;
 	}
+
+
+
+
+
+	#
+	#    XXXXX   XXXXXX    XXXX    X     X
+	#    X       X    X    X   X   X X X X
+	#    XXXXX   X    X    X   X   X  X  X 
+	#    X       X    X    XXX     X     X
+	#    X       X    X    X  X    X     X   
+	#    X       XXXXXX    X   X   X     X
+	#
+	#
 
 	public function form($tabla,$id, $action = ""){
 
@@ -246,6 +268,21 @@ class Request_model extends CI_Model {
 		return $fields;
 	}
 
+
+
+
+
+
+	#
+	#    XXXXX   XXXXXX    X    XXXX
+	#    X       X    X    X    X   X
+	#    X       X   X     X    X   X 
+	#    X  XX   XXXX      X    X   X
+	#    X   X   X   X     X    X   X
+	#    XXXXX   X    X    X    XXXX
+	#
+	#
+
 	public function grid($tabla,$where='',$orderBy='') { 
 
 		#2 SETEAMOS el where y el order by
@@ -270,10 +307,6 @@ class Request_model extends CI_Model {
 		#4 empezamos a crear el query con el seteo inicial y el recorrido del array $t
 		$q = 'SELECT ';
 		$from = ' FROM '.$tabla.' ';
-
-		# seteamos el unierso
-		$u = $this->session->userdata('u');
-		if(empty($u)) return;
 
 		for ($i=0; $i <count($t) ; $i++):
 	        $colName = $t[$i]['COLUMN_NAME'];
@@ -361,12 +394,31 @@ class Request_model extends CI_Model {
 		}
 		//pre($q);
 
+		$return['meta']['tabla'] = $tabla;
+		$return['meta']['where'] = $where;
+		$return['meta']['orderBy'] = $orderBy;
+
 		$return['titulo'] = $title;
 		$return['columna'] = $col;
 		$return['contenido'] = $r;
 
 		return $return;
 	}
+
+
+
+	
+
+	#
+	#   XXX   XXXXX  XXXXXX     XX   XX
+	#    X      X    X          X X X X
+	#    X      X    X          X  X  X 
+	#    X      X    XXXXXX     X  X  X   
+	#    X      X    X          X     X
+	#    X      X    X          X     X
+	#   XXX     X    XXXXXX     X     X
+	#
+	#
 
 	public function item($tabla,$id) { 
 		#3 ########### LISTAR COLU MNAS DE LA TABLA #################################################
@@ -425,62 +477,22 @@ class Request_model extends CI_Model {
 		//echo "<br><br><br><br><br><br><br><br><pre>"; print_r($r); echo "</pre>";
 		return $return;
 	}
-	public function json($tabla,$id) { 
-		#3 ########### LISTAR COLU MNAS DE LA TABLA #################################################
-		$q = "SELECT COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT,COLUMN_DEFAULT,COLUMN_KEY
-		FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = '".DATABASE."' and TABLE_NAME = '$tabla'";
-		$r = $this->db->query($q)->result();
-		$t = json_decode( json_encode( $r ), true );
-		#############################################################################################
-		# SANEAMOS TABLA E ID
-		if( !is_numeric($id) )
-			return;
-		#4 empezamos a crear el query con el seteo inicial y el recorrido del array $t
-		$where   = " WHERE id_$tabla = $id ";
-		$q = 'SELECT ';
-		$from = ' FROM '.$tabla.' ';
 
-		# seteamos el unierso
-		$u = $this->session->userdata('u');
-		if(empty($u)) return;
 
-		for ($i=0; $i <count($t) ; $i++):
-	        $colName = $t[$i]['COLUMN_NAME'];
-	        $colKey = $t[$i]['COLUMN_KEY'];
-	        $colType = $t[$i]['DATA_TYPE'];
 
-	        if($i>0) $q.=', ';
 
-	        if( stristr($colName,'_id') ){
-	        	$a = str_replace('_id', '', $colName);
-	        	$q.= $a.'.nombre_'.$a. ' as '.$a;
-	        	$q.= ','. $tabla.'.'.$colName.' as '.$colName;
-	        	$from.=', '.$a;
-	        	$where.=' and '.$a.'.id_'.$a.' = '.$tabla.'.'.$a.'_id';
-	        	if($colName=='u_id'){
-	        		$where.=' and '.$tabla.'.u_id = '.$u;
-	        	}
-	        	$colName = $a;
-	        }else{
-	        	if($colType=='date'){
-					$q.= "DATE_FORMAT($tabla.$colName,'%d/%m/%Y') as $colName";
-	        	}else{
-		        	$q.= $tabla.'.'.$colName.' as '.$colName;
-	        	}
-	        }
-		endfor; // termina el recorrido de t
 
-		# hacemos el query
-		$q = $q.$from.$where;
-		
-		$re = $this->db->query($q)->result();
-		# si encuentra
-		$return = '';
-		if( count($re)>0 )
-			$return = $re[0];
-		//echo "<br><br><br><br><br><br><br><br><pre>"; print_r($r); echo "</pre>";
-		return $return;
-	}	
+	#
+	#    X   X  XXXXXX  XXXX     XXXXX   XXXXX  XXXXXX 
+	#    X   X  X    X  X   X   X     X    X    X      
+	#    X   X  X    X  X    X  X     X    X    X       
+	#    X   X  XXXXXX  X    X  XXXXXXX    X    XXXXXX    
+	#    X   X  X       X    X  X     X    X    X      
+	#    X   X  X       X   X   X     X    X    X      
+	#    XXXXX  X       XXXX    X     X    X    XXXXXX 
+	#
+	#
+
 
 	public function update(){
 		if( empty($_POST) ) return;
@@ -574,86 +586,8 @@ class Request_model extends CI_Model {
 			$id = $a[0]['id'];
 		  }
 
-		  //OTRAS ACTUALIZACIONES SIMULTANEAS
+		# OTRAS ACTUALIZACIONES SIMULTANEAS
 		  
-			  if($tabla == 'movi' ) {
-			  	$a = $this->db->query("SELECT * from m where id_m = $m_id")->result();
-				$b = json_decode( json_encode( $a ), true );	
-			  	$c = $b[0]['nombre_m'];
-			  	$d = explode('-', $c);
-			  	$siglas = $d[0];
-			  }
-
-			  if($tabla == 'movi' and $id_original=='new'){
-				$q = "INSERT INTO `escritos` 
-				(`juicio_id`, `siglas`, `usuario_id`, `u_id` ) 
-				VALUES 
-				('$juicio_id','$siglas','$usu','$u' );";
-			    $this->db->query($q);
-			  }
-
-			  if( $tabla == 'movi' and $id!='new' ){
-				$q = "
-				UPDATE `escritos` SET
-				`texto_escritos` = ''
-				WHERE `juicio_id` = '$juicio_id' and `siglas` = '$siglas'
-				";
-			    $this->db->query($q);			  	
-			  }
-			  # PAGO (actualizamos la fecha de vencimiento)
-			  ##################################################################
-			  if($tabla=='pago'){
-				# SETEAMOS DESDE LA SESION EL U_ID
-				$u = $this->session->userdata('u');
-				$usu = $this->session->userdata('usu');
-				$plan_u = $this->session->userdata('plan');
-				$vencimiento = $this->session->userdata('vencimiento');
-
-				if($periodicidad_id==10) $periodicidad_id = 12;
-
-				$sm = $periodicidad_id*$cantidad_id;
-
-			  	if( $plan_u != $plan_id )
-					$vencimiento = date('Y-m-d');
-
-				$nuevafecha = strtotime ( '+'.$sm.' month' , strtotime ( $vencimiento ) ) ;
-				$nuevafecha = date ( 'Y-m-j' , $nuevafecha );
-
-				/*
-			    pre($plan_u);
-			    pre($plan_id);
-			    pre($periodicidad_id);
-			    pre($cantidad_id);
-			    pre($nuevafecha);
-				*/
-		  	
-			  	$q = "UPDATE `u` SET `plan_id` = '$plan_id',`vencimiento` = '$nuevafecha' WHERE `id_u` = '$u' ";
-			    $this->db->query($q);			  	
-
-				$this->session->set_userdata('plan', $plan_id);
-				$this->session->set_userdata('vencimiento', $nuevafecha);
-
-
-			  	/*
-			  	simplemente actualizar el plan de la tabla pago, al plan de la tabla u
-			  	si el plan es 11, el vencimiento de u debe ser hoy() y sumarle lo de abajo
-				si el pago es mensual, sumar la cantidad y multiplicarlo por 31, el resultado sumarle al vencimiento del u
-				si el pago es anual, sumar la cantidad y multiplicarlo por 365, el resultado sumarle al vencimiento del u
-					[tabla] => pago
-				    [id_pago] => new
-				    [nombre_pago] => 
-				    [plan_id] => 2
-				    [periodicidad_id] => 1
-				    [cantidad_id] => 1
-				    [monto_pago] => 70000
-				    [fecha_pago] => 2017-03-25
-				    [forma_de_pago_id] => 1
-				    [transaccion_boleta] => 234567899
-				    [detalle_pago] => 
-				    [verificado_id] => 1
-			  	*/	
-				    //pre($valores);
-			  }
 
 
 		# MOVE UPLOADED FILE ############################3
