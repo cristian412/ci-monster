@@ -1,47 +1,68 @@
 <?php
 function listaSimple($lista){
     if( isset($lista['contenido']) ){
-      foreach ($lista['columna'] as $key => $value){
-        if($key!='u_id')
-          $t[$key] = $value['label'];
-      }
+      # id_dom
+      next($lista['columna']); //llevamos el puntero del array al siguiente elmento
+      $a = key($lista['columna']); //obtenemos el key que necesitamos ej. id_tabla
+      $id_dom = str_replace('id_', '', $lista['columna'][$a]['name'] ); // guardamos el nombre de la tabla como $id_dom
+      // recorremos las columnas para guardar los titulos en la variable t
+      foreach ($lista['columna'] as $key => $value)
+        if($key!='u_id') $t[$key] = $value['label']; // se carga si no es u_id
+      // guardamos el contenido en la variable c
       $c = $lista['contenido'];
     }else{
+      $id_dom = '';
       $t = $lista[0];
-      $c = $lista;
-      $lista['contenido'] = $c;
-      foreach ($t as $key => $value) {
-        $v = "$key";
-        $v = str_replace('_', ' ', $v);
-        $v = ucwords($v);
-        $t[$key] = $v;
-      }
+      $c = $lista['contenido'] = $lista;
+      foreach ($t as $key) 
+        $t[$key] = ucwords( str_replace('_', ' ', $key) );
     }
-    // empieza a crear la tabla  
-    $r = '<div class="table-responsive">
-<table class="table table-striped table-hover table-bordered"><thead class="thead-inverse">';
-    foreach ($t as $key => $value)
-    	$r.= "<th>".$value."</th>";
+
+    # EMPEZAMOS A CREAR LA TABLA
+    $r = '<table id="grid_'.$id_dom.'" class="table table-striped table-hover table-bordered table-responsive">';
+    // Table head
+    $r.= '<thead class="thead-inverse">';
+    foreach ($t as $value) $r.= "<th>".$value."</th>";
     $r .= '</thead>';
-    foreach ($c as $key => $value):
+    // Table Body
+    $r .= '<tbody>';
+    foreach ($c as $value):
       $r .= "<tr>";
-      foreach ($t as $k => $v){
-          $r.= "<td>".$value[$k]."</td>";
-      }
+      foreach ($t as $k => $v) $r.= "<td>".$value[$k]."</td>";
       $r.= "</tr>";
     endforeach;
-    $r .= '</table></div>';
-
+    $r .= '</tbody>';
+    $r .= '</table>';
+    // Script DataTables
+    $r.= '
+    <script>
+    $("#grid_'.$id_dom.'").DataTable( {
+        "language": { "url":     "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json" }
+    } );
+    </script>
+    ';
+    // Empty Message
     if( count($lista['contenido']) == 0 )
-      $r = '
-      <div class="alert alert-dismissible alert-warning">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <h4>Atención!</h4>
-        <p>No existen elementos para mostrar</p>
-      </div>
-      ';
+      $r = '<div class="alert alert-dismissible alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Atención!</h4>
+            <p>No existen elementos para mostrar</p>
+          </div>
+          ';
 
 	return $r;
+}
+
+function consola($q){
+  echo "<script>console.log('Mostrar en consola: ".$q."')</script>";
+}
+function console($q){
+  echo "<script>console.log('Mostrar en consola: ".$q."')</script>";
+}
+function pre($v){
+  echo "<div style='margin:20px;border:1px solid gray'><pre>";
+  print_r($v);
+  echo"</pre></div>";
 }
 
 function listaJqgrid($lista){
@@ -96,54 +117,17 @@ function listaJqgrid($lista){
   return $r;
 
 }
-function listadatatable($lista){
-  if( !isset($lista['columna']) ){
-      $t = array();
-      @$t = $lista[0];
-      foreach ($t as $key => $value) {
-        $colName  = "$key";
-        $v = "$key";
-        $v = str_replace('_', ' ', $v);
-        $v = ucwords($v);
-        @$t[$key] = ['label'=>$v,'name'=>$colName,'width'=>'40','sortype'=>'varchar','align'=>'left'];
-      }
-    $lista['columna'] = $t;
-    $lista['contenido'] = $lista;
-  }
-  $titulo = array();
-  foreach ($lista['columna'] as $key => $value) $titulo[]['title'] = $value['label'];
-
-  unset($lista['columna']['u']);
-  $lista['columna'] = array_values($lista['columna']);
-  $t = json_encode($titulo);
-  $c = json_encode($lista['contenido']);
-  $r ='
-  <script>
-    var titulo = '.$t.';
-    var contenido = '.$c.';
-  </script>
-  <table class="display table" width="100%" id="grid"></table>
-  <script>
-    $("#grid").DataTable({
-          data: contenido,
-          columns: titulo
-
-      });
-  </script>';
-  return $r;
-
-}
-
-
-function formbasico($fields){
+function formbasico($fields,$id_dom=''){
   if(empty($fields))
     return;
-  if(!isset($fields['tabla']) )
-    return;
 	$action = $fields['tabla']['action'];
-	$tabla = $fields['tabla']['value'];
-  $result = "<div class='row'><form role='form' class='form' enctype='multipart/form-data' action='$action' method='post' 
-  id='form_$tabla' >";
+  $tabla  = $fields['tabla']['value'];
+	$id     = $fields['id_'.$tabla]['value'];
+
+  if($id_dom == '') $id_dom = "form_".$tabla;
+
+  $result = "<div class='row'>
+  <form role='form' class='form' enctype='multipart/form-data' action='$action' method='post' id='$id_dom' >";
 	    foreach ($fields as $v):
         
 	      #### CREA LAS VARIABLES INDIVIDUALES 
@@ -179,7 +163,7 @@ function formbasico($fields){
 	        if($type!='hidden' and $element!='checkbox' and $type!='submit'):
 	            $result .=
 	            "<div class='form-group form-group-sm' $labelbg >
-	              <label id='label_$name' for='$name'>$label</label>
+	              <label for='$name'>$label</label>
 	              <input class='form-control inputGris'
                   $addCommas
 	                id='$name'
@@ -195,8 +179,8 @@ function formbasico($fields){
           if($type == 'submit'):
               $result .=
               "<div class='form-group form-group-sm' $labelbg >
-               <label id='label_$name' for='$name'>$label</label><br>
-                <button class='btn btn-primary' type='submit' id='$name"."_"."$tabla'>$value</button>
+               <label for='$name'>$label</label><br>
+                <button class='btn btn-primary' type='submit' id='$name'>$value</button>
               </div>";
 
 
@@ -207,12 +191,13 @@ function formbasico($fields){
 	      if($element == 'textarea'):
 	        $result .= "
 	          <div class='form-group form-group-sm' $labelbg >
-	            <label id='label_$name' for='$name'>$label </label>
+	            <label for='$name'>$label </label>
 	            <textarea rows='4' cols='100' style='width:100%'
 	              id='$name'
 	              onFocus=\"this.style.backgroundColor='#FFFFBB'\"
 	              name='$name'
-	                $atributes
+	                $autofocus
+	                $required 
 	            >$value</textarea>
 	          </div>";
 	      endif;
@@ -222,7 +207,7 @@ function formbasico($fields){
 	        $ckd = '';
 		    if($value == 1) $ckd=' checked ';
 	        $result .= "<div class='form-group form-group-sm' $labelbg>";
-			$result .= "<label id='label_$name' for='$name'>$label</label>";
+			$result .= "<label for='$name'>$label</label>";
             $result .= "<input type='checkbox' class='form-control' name='$name' id='$name value='1' $ckd/></div>";
 	      endif; 
 
@@ -231,7 +216,7 @@ function formbasico($fields){
 	      if($element == 'select'):
 	        $result .= "
 	          <div class='form-group form-group-sm' $labelbg>
-	            <label id='label_$name' for='$name'>$label</label>
+	            <label for='$name'>$label</label>
 	            <select name='$name' class='form-control' id='$name' $atributes
 	            onFocus=\"this.style.backgroundColor='#FFFFBB'\" >
 	              <option value=''>Seleccione</option>";
@@ -265,34 +250,40 @@ function formbasico($fields){
 	return $result;
 }
 function update($update){
-  $update = str_replace("'", "", $update);
-  $update = str_replace("`", "", $update);
-    $re = '
-  <div class="alert alert-dismissible alert-success" id="update">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <b>ACTUALIZACIÓN DE LA BASE DE DATOS: </b><br>'.
-    $update.
-  '</div>
-  <script>
-    window.setTimeout(slide, 1000);
-    function slide(){
-      $("#update").slideUp(500);      
-    }
-  </script>
-  ';
-  return $re;
+    $update = str_replace(',', ', ', $update);
+    $update = '
+    <script>
+    setTimeout(function() {
+        $.bootstrapGrowl(
+        "<span style=\"color:white;font-size:2em;\">UPDATE SUCCESSFULL</span><p>'.$update.'</p>", {
+  ele: "body", // which element to append to
+  type: "success", // (null, "info", "danger", "success")
+  offset: {from: "top", amount: 35}, // "top", or "bottom"
+  align: "right", // ("left", "right", or "center")
+  width: 550, // (integer, or "auto")
+  height: 350, // (integer, or "auto")
+  delay: 4000, // Time while the message will be displayed. It"s not equivalent to the *demo* timeOut!
+  allow_dismiss: true // If true then will display a cross to close the popup.
+        });
+    }, 500);
+    </script>
+    ';
+  return $update;
 }
-function modal($formulario){
+function modal($data,$title='MODAL'){
+  if( $title == 'MODAL' and stristr($data, "id='form_" ) )
+    $title = 'EDITAR ITEM';
+  $id_dom = str_replace(' ', '-', strtolower($title) );
   $html = '
-  <div class="modal fade"  data-backdrop="static" data-keyboard="false" tabindex="-1" id="editar-item" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal fade"  data-backdrop="static" data-keyboard="false" tabindex="-1" id="'.$id_dom.'" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog  modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Editar </h4>
+          <h4 class="modal-title">'.$title.'</h4>
         </div>
         <div class="modal-body">'.
-          $formulario.
+          $data.
         '</div>
         <div class="modal-footer">
         </div>
@@ -301,41 +292,6 @@ function modal($formulario){
   </div>
   ';
   return $html;
-}
-function modal_id($texto,$id){
-  $title = str_replace('_', ' ', $id);
-  $title = str_replace('modal', '', $title);
-  $title = strtoupper($title);
-  $html = '
-  <div class="modal fade"  data-backdrop="static" data-keyboard="false" tabindex="-1" id="'.$id.'" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog  modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" id="'.$id.'_close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">'.$title.' </h4>
-        </div>
-        <div class="modal-body">'.
-          $texto.
-        '</div>
-        <div class="modal-footer">
-        </div>
-      </div>
-    </div>
-  </div>
-  ';
-  return $html;
-}
-
-function consola($q){
-  echo "<script>console.log('Mostrar en consola: ".$q."')</script>";
-}
-function console($q){
-  echo "<script>console.log('Mostrar en consola: ".$q."')</script>";
-}
-function pre($v){
-  echo "<div style='margin:200px'><pre>";
-  print_r($v);
-  echo"</pre></div>";
 }
 
 function montol($monton){
