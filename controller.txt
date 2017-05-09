@@ -8,7 +8,7 @@ class XXX extends CI_Controller {
 
 	public function index(){
 		$data['data']['update'] = $this -> Update_model -> update();
-		$r = $this -> Grid_model -> grid($this->tabla,'','');
+		$r = $this -> Request_model -> grid($this->tabla);
 		$data['data']['tabla'] = $this->tabla;
 		$data['data']['lista'] = $r;
 		$data['yield'] = 'tabla/'.$this->tabla.'/list';
@@ -17,7 +17,7 @@ class XXX extends CI_Controller {
 	public function show(){
 		$id = $this->uri->segment(3);
 		$data['data']['update'] = $this -> Update_model -> update();
-		$r = $this -> Item_model -> item($this->tabla,$id);
+		$r = $this -> Request_model -> item($this->tabla,$id);
 
 		$data['data']['lista'] = $r;
 		$data['data']['tabla'] = $this->tabla;
@@ -30,10 +30,8 @@ class XXX extends CI_Controller {
 	}
 	public function edit(){
 		$id = $this->uri->segment(3);
-		if(empty($id))
-			$id = 'new';
-		$tabla = $this->tabla;
-		$r = $this -> Form_model -> form($this->tabla, $id, URL.$this->tabla);
+		if(empty($id)) $id = 'new';
+		$r = $this -> Form_model -> form($this->tabla, $id);
 		$data['data']['fields'] = $r;
 		$data['data']['tabla'] = $this->tabla;
 		$data['yield'] = 'tabla/'.$this->tabla.'/edit';
