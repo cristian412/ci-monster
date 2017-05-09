@@ -32,7 +32,7 @@ class Request_model extends CI_Model {
 		return $result;
 	}
 
-	public function form($tabla,$id,$action){
+	public function form($tabla,$id, $action = ""){
 
 		/*
 		$tabla = string 
@@ -69,6 +69,7 @@ class Request_model extends CI_Model {
 		$atributes = '';
 		$style = array();
 
+		if($action=='') $action = URL.$tabla.'/show/'.$id;
 
 		################### SE GENERA EL PRIMER ARRAY #############################################################
 		$var = array(
