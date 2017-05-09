@@ -4,40 +4,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class XXX extends CI_Controller {
 
 	private $tabla = 'xxx';
-	//echo "<br><br><br><br><br><br><br><pre>"; print_r($id); echo "</pre>";
 
 	public function index(){
-		$data['data']['update'] = $this -> Update_model -> update();
-		$r = $this -> Request_model -> grid($this->tabla);
-		$data['data']['tabla'] = $this->tabla;
-		$data['data']['lista'] = $r;
-		$data['yield'] = 'tabla/'.$this->tabla.'/list';
-	    $this->load->view('base/layout',$data);	
+		$data['update'] = $this -> Request_model -> update();
+		$data['fields'] = $this -> Request_model -> form($this->tabla,'new',URL.$this->tabla);
+		$data['lista']  = $this -> Request_model -> grid($this->tabla);
+		$data['yield_data'] = $this->load->view('tables/'.$this->tabla.'/list',$data,true);
+	    $this->load->view('layout/adminlte',$data);	
 	}
 	public function show(){
 		$id = $this->uri->segment(3);
-		$data['data']['update'] = $this -> Update_model -> update();
-		$r = $this -> Request_model -> item($this->tabla,$id);
-
-		$data['data']['lista'] = $r;
-		$data['data']['tabla'] = $this->tabla;
-		$data['data']['id'] = $id;
-		$data['yield'] = 'tabla/'.$this->tabla.'/show';
-		
-		if( empty($r) )$data['yield'] = 'base/404';
-
-		$this->load->view('base/layout',$data);
+		$data['update'] = $this -> Request_model -> update();
+		$data['fields'] = $this -> Request_model -> form($this->tabla,$id);
+		$data['lista']  = $this -> Request_model -> item($this->tabla,$id);
+		$data['yield_data'] = $this->load->view('tables/'.$this->tabla.'/show',$data,true);
+		$this->load->view('layout/adminlte',$data);
 	}
 	public function edit(){
 		$id = $this->uri->segment(3);
 		if(empty($id)) $id = 'new';
-		$r = $this -> Form_model -> form($this->tabla, $id);
-		$data['data']['fields'] = $r;
-		$data['data']['tabla'] = $this->tabla;
-		$data['yield'] = 'tabla/'.$this->tabla.'/edit';
-	    $this->load->view('base/layout',$data);	
+		$data['fields'] = $this -> Request_model -> form($this->tabla,$id);
+		$data['yield_data'] = $this->load->view('tables/'.$this->tabla.'/edit',$data,true);
+		$this->load->view('layout/adminlte',$data);
 	}
 
 }
-
-
