@@ -246,7 +246,7 @@ class Request_model extends CI_Model {
 		return $fields;
 	}
 
-	public function grid($tabla,$where,$orderBy) { 
+	public function grid($tabla,$where='',$orderBy='') { 
 
 		#2 SETEAMOS el where y el order by
 		if($where!='')
