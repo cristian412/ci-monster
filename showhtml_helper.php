@@ -580,5 +580,4 @@ function montolnew($monton){
   $montol="$centenademillon $decenademillon $unidaddemillon $centenademil $decenademil $unidaddemil $centena $decena $uni";
 
   return($montol);
-
 };
