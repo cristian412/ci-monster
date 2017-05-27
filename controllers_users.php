@@ -6,6 +6,7 @@ class Users extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('Request_model');
+		$this->load->model('Tables_model');
 		$this->load->library('session');
 	}
 
@@ -31,9 +32,12 @@ class Users extends CI_Controller {
 		$q = "SELECT * from users where username='$usuario' and password='$pass'";
 		$r = $this->Request_model->peticion($q);
 		if( count($r)>0 ){
-			foreach ($r[0] as $key => $value) {
+			foreach ($r[0] as $key => $value)
 				$this->session->set_userdata($key, $value);
-			}
+			
+			$tables = $this -> Tables_model -> table_name();
+			$this->session->set_userdata('tables', $tables);
+			
 			redirect( URL );
 		}else{
 			$data['message'] = 'ERROR USER OR PASSWORD WRON';
