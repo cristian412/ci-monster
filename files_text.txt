@@ -60,8 +60,8 @@ $modal = modal($formulario);
   <?=$update?>
   <h1>
     Lista <?=ucwords($tabla)?>
-    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#editar-item">Agregar con Modal</a>
-    <a href="<?=URL.$tabla?>/edit/new" class="btn btn-success">Agregar</a>
+    <a href='#' class='btn btn-success' data-toggle='modal' data-target='#editar-item'>Agregar con Modal</a>
+    <a href='<?=URL.$tabla?>/edit/new' class='btn btn-success'>Agregar</a>
   </h1>
   <?//=pre($lista)?>
 
@@ -82,7 +82,7 @@ $modal = modal($formulario);
 ?>
 <?=$update?>
 <h1>Show <?=ucwords( $tabla ) ?> 
-	<a href="#" class="btn btn-success" data-toggle="modal" data-target="#editar-item">Editar</a>
+	<a href='#' class='btn btn-success' data-toggle='modal' data-target='#editar-item'>Editar</a>
 </h1>
 
 <?=pre($lista)?>
