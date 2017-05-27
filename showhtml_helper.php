@@ -162,7 +162,7 @@ function formbasico($fields,$id_dom=''){
 	        if($type=='hidden')
 				    $result .= "<input type='hidden' name='$name' value='$value' >"; 
 
-	        if($type!='hidden' and $element!='checkbox' and $type!='submit'):
+	        if($type!='hidden' and $element!='checkbox' and $type!='submit' and $type!='file'):
 	            $result .=
 	            "<div class='form-group form-group-sm' $labelbg >
 	              <label for='$name'>$label</label>
@@ -178,6 +178,31 @@ function formbasico($fields,$id_dom=''){
                    />
 	            </div>";
 	        endif;
+          if($type == 'file'):
+              $result .=
+              "<div class='form-group form-group-sm' $labelbg >
+                <br>
+               <label for='$name' class='btn btn-primary'>Chose File</label>
+                <input type='file' id='$name' style='display:none'>
+              </div>
+              <script>
+                document.querySelectorAll(\"[type='file']\")
+                  .forEach(function(control){
+                  
+                  control.addEventListener('change',function(ev){
+                    console.log(ev.target.files[0].name);
+                    console.log(this.id);
+
+                    document.querySelector(\"[for='\"+this.id+\"']\")
+                      .innerHTML= 'File: '+ev.target.files[0].name;
+                    document.querySelector(\"[for='\"+this.id+\"']\")
+                          .classList.add('btn-success');                  
+                  });
+                });
+              </script>
+
+              ";
+          endif;
           if($type == 'submit'):
               $result .=
               "<div class='form-group form-group-sm' $labelbg >
