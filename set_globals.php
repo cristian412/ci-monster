@@ -76,6 +76,18 @@ if(!empty($_POST)){
 			mkdir($path, 0777, true);
 			chmod($path, 0777);
 		}
+		// create folder MYSQL
+		$path   = FCPATH.'application/controllers/mysql';
+		if(!is_dir($path)){ 
+			mkdir($path, 0777, true);
+			chmod($path, 0777);
+		}
+		// create folder MYSQL
+		$path   = FCPATH.'application/views/mysql';
+		if(!is_dir($path)){ 
+			mkdir($path, 0777, true);
+			chmod($path, 0777);
+		}
 
 		######## LOAD FILES #########
 		// HOME CONTROLLER
@@ -122,6 +134,16 @@ if(!empty($_POST)){
 		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/views_users_sign_out.php");
 		$path   = FCPATH.'application/views/layout/adminlte/sign_out.php';
 		if( ! write_file($path, $data) ) $re.='ERROR WRITING htaccess'.$path.'<br>';
+		chmod($path, 0777);
+		# views_mysql
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/views_mysql_index.php");
+		$path   = FCPATH.'application/views/mysql/index.php';
+		if( ! write_file($path, $data) )  $re.= 'ERROR WRITING '.$path.'<br>';
+		chmod($path, 0777);
+		# views_mysql
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/controllers_mysql_tables.php");
+		$path   = FCPATH.'application/controllers/mysql/Tables.php';
+		if( ! write_file($path, $data) )  $re.= 'ERROR WRITING '.$path.'<br>';
 		chmod($path, 0777);
 
 		# Finally change ROUTES
