@@ -63,15 +63,16 @@ class Request_model extends CI_Model {
 		*/
 		################### CANCELAMOS SI NO ES U=1   #############################################################
 		# tablas que el usuario puede agregar o editar:
-		$u = $this->session->userdata('u');
-		$arr = ['juicio','actor','movi','u','pago','preferencias','testigo','escritos','usuario'];
-		if( !in_array($tabla, $arr) and  $u!=1 ) return;
+		//$u = $this->session->userdata('u');
+		//$arr = ['juicio','actor','movi','u','pago','preferencias','testigo','escritos','usuario'];
+		//if( !in_array($tabla, $arr) and  $u!=1 ) return;
 		################### RETORNAMOS SI EL USUARIO SOLO PUEDE VER  ##############################################		
-		$u_cat = $this->session->userdata('u_cat');
+		/*$u_cat = $this->session->userdata('u_cat');
 		if($u_cat == 2 ){
 			$fields = array();
 			return $fields;	
 		} 
+		*/
 
 		################### SE SANEA LAS VARIABLES    #############################################################
 		$q = $this->db->query("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = '".DATABASE."' ")->result();
@@ -91,7 +92,7 @@ class Request_model extends CI_Model {
 		$atributes = '';
 		$style = array();
 
-		if($action=='') $action = URL.$tabla.'/show/'.$id;
+		if($action=='') $action = URL.'tables/'.$tabla;
 
 		################### SE GENERA EL PRIMER ARRAY #############################################################
 		$var = array(
@@ -166,7 +167,7 @@ class Request_model extends CI_Model {
 				# BUSCAMOS SI TIENE EL CAMPO U_ID
 				$u = $this->session->userdata('u');
 				$usu = $this->session->userdata('usu');
-				if(empty($u)) return;
+				//if(empty($u)) return;
 
 				$q = $this->db->query("
 				SELECT 
@@ -220,6 +221,8 @@ class Request_model extends CI_Model {
 			################### REQUIERED #############################################################
 			$atributes = '';
 			if(stristr($colComment, 'required')) $atributes.= ' required ';
+			if(stristr($colName, '_id'))  $atributes.= ' required ';
+
 			################### AUTOFOCUS #############################################################
 			if(stristr($colComment, 'autofocus')) $atributes.= ' autofocus ';
 			################### DECIMAL   #############################################################
@@ -382,11 +385,14 @@ class Request_model extends CI_Model {
 		$r = json_decode( json_encode( $re ), true );
 
 		#6 agregamos los botones de abrir y editar al contenido
+		$path = URL.$tabla;
+		if( $this->uri->segment(1) == 'tables' ) $path = URL.'tables/'.$tabla;;
+
 		for ($i=0; $i <count($r); $i++) { 
 			$reg = $r[$i];
 	        $id = $r[$i]['id_'.$tabla];
-		    $abrir  = ['abrir'=> '<a href="'.URL.$tabla.'/show/'.$id.'">📂</a>'];
-		    $editar = ['editar'=> '<a href="'.URL.$tabla.'/edit/'.$id.'">✎</a>'];
+		    $abrir  = ['abrir'=> '<a href="'.$path.'/show/'.$id.'">📂</a>'];
+		    $editar = ['editar'=> '<a href="'.$path.'/edit/'.$id.'">✎</a>'];
 
 			$reg = $abrir+$reg;				
 			$reg = $reg+$editar;
@@ -436,8 +442,8 @@ class Request_model extends CI_Model {
 		$from = ' FROM '.$tabla.' ';
 
 		# seteamos el unierso
-		$u = $this->session->userdata('u');
-		if(empty($u)) return;
+		//$u = $this->session->userdata('u');
+		//if(empty($u)) return;
 
 		for ($i=0; $i <count($t) ; $i++):
 	        $colName = $t[$i]['COLUMN_NAME'];
