@@ -1,55 +1,59 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class XXX extends CI_Controller {
-
-	private $tabla = 'xxx';
-
+class Menu extends CI_Controller {
+	private $tabla = 'menu';
 	public function index(){
+		$action = $tabla = $this->tabla;
+		if( $this->uri->segment(1) == 'tables' )	$action = URL.'tables/'.$action;
 		$data['update'] = $this -> Request_model -> update();
-		$data['fields'] = $this -> Request_model -> form($this->tabla,'new',URL.$this->tabla);
-		$data['lista']  = $this -> Request_model -> grid($this->tabla);
-		$data['yield_data'] = $this->load->view('tables/'.$this->tabla.'/list',$data,true);
+		$data['fields'] = $this -> Request_model -> form($tabla,'new',$action);
+		$data['lista']  = $this -> Request_model -> grid($tabla);
+		$data['yield_data'] = $this->load->view('tables/'.$tabla.'/list',$data,true);
 	    $this->load->view('layout/adminlte/index',$data);	
 	}
 	public function show(){
+		$tabla = $this->tabla;
 		$id = $this->uri->segment(3);
+		if( $this->uri->segment(1) == 'tables' ) $id = $this->uri->segment(4);
 		$data['update'] = $this -> Request_model -> update();
-		$data['fields'] = $this -> Request_model -> form($this->tabla,$id);
-		$data['lista']  = $this -> Request_model -> item($this->tabla,$id);
-		$data['yield_data'] = $this->load->view('tables/'.$this->tabla.'/show',$data,true);
+		$data['tabla'] = $tabla;
+		$data['fields'] = $this -> Request_model -> form($tabla,$id);
+		$data['lista']  = $this -> Request_model -> item($tabla,$id);
+		$data['yield_data'] = $this->load->view('tables/'.$tabla.'/show',$data,true);
 		$this->load->view('layout/adminlte/index',$data);
 	}
 	public function edit(){
+		$tabla = $this->tabla;
 		$id = $this->uri->segment(3);
+		if( $this->uri->segment(1) == 'tables' ) $id = $this->uri->segment(4);
 		if(empty($id)) $id = 'new';
-		$data['fields'] = $this -> Request_model -> form($this->tabla,$id);
-		$data['yield_data'] = $this->load->view('tables/'.$this->tabla.'/edit',$data,true);
+		$data['fields'] = $this -> Request_model -> form($tabla,$id);
+		$data['yield_data'] = $this->load->view('tables/'.$tabla.'/edit',$data,true);
 		$this->load->view('layout/adminlte/index',$data);
 	}
-
 }
+
 &&&
 <?php
 # SETEAR EL FORMULARIO
 //$fields['nro']['col'] = '1';
-
 $formulario = formbasico($fields);
-
 ?>
 <h1>Edit <?=$fields['tabla']['value']?></h1>
-
 <?=$formulario?>
 
 &&&
 <?php
 $tabla = $lista['meta']['tabla'];
-
+$add_url = $fields['tabla']['action'].'/edit/new';
 # SETEAMOS LA LISTA
 //unset($lista['columna']['id_juicio']);
-$li = listasimple($lista);
 
-
+if( count($lista['contenido'])<10  )
+	$li = listasimple($lista,'','');
+else
+	$li = listasimple($lista);
 
 # SETEAR EL FORMULARIO
 //$fields['nro']['col'] = '1';
@@ -59,11 +63,12 @@ $modal = modal($formulario);
 ?>
   <?=$update?>
   <h1>
-    Lista <?=ucwords($tabla)?>
+    Lista <?=ucwords($lista['meta']['tabla'])?>
     <a href='#' class='btn btn-success' data-toggle='modal' data-target='#editar-item'>Agregar con Modal</a>
-    <a href='<?=URL.$tabla?>/edit/new' class='btn btn-success'>Agregar</a>
+    <a href='<?=$add_url?>' class='btn btn-success'>Agregar</a>
   </h1>
   <?//=pre($lista)?>
+  <?//=pre($fields)?>
 
   <?=$li?>
 
