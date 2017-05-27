@@ -181,8 +181,8 @@ function formbasico($fields,$id_dom=''){
           if($type == 'file'):
               $result .=
               "<div class='form-group form-group-sm' $labelbg >
-                <br>
-               <label for='$name' class='btn btn-primary'>Chose File</label>
+                <label>$label</label><br>
+               <label for='$name' class='btn btn-default'>Chose File</label>
                 <input type='file' id='$name' style='display:none'>
               </div>
               <script>
