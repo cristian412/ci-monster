@@ -148,10 +148,11 @@ class Tables_model extends CI_Model {
             chmod($path, 0777);
            }
            
-      $arr = ['list','show','edit','controller'];
-      foreach ($arr as $value) {
-        $data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/" .$value.".txt");
-        $data = str_replace(['xxx','XXX'], [$tabla,$Tabla], $data);
+      $arr = ['0'=>'controller','1'=>'edit','2'=>'list','3'=>'show'];
+      $a = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/files_text.txt");
+      $texto = explode('&&&', $a);
+      foreach ($arr as $key => $value) {
+        $data = str_replace(['xxx','XXX'], [$tabla,$Tabla], $texto[$key]);
         $path = FCPATH."application/views/tables/".$tabla."/".$value.".php";
         if($value=='controller')
           $path = FCPATH."application/controllers/tables/".$Tabla.".php";
@@ -162,7 +163,7 @@ class Tables_model extends CI_Model {
                 chmod($path, 0777);
             $re.= 'File written! in '.$path.'<br>';
           }
-          sleep(1);
+          sleep(0.1);
         else:
           //$re.= "ya existe el archivo ".$value." <br>";
         endif;
@@ -196,3 +197,6 @@ class Tables_model extends CI_Model {
     return $tablas;
   }
 }
+
+
+
