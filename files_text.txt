@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Menu extends CI_Controller {
-	private $tabla = 'menu';
+class XXX extends CI_Controller {
+	private $tabla = 'xxx';
 	public function index(){
 		$action = $tabla = $this->tabla;
 		if( $this->uri->segment(1) == 'tables' )	$action = URL.'tables/'.$action;
