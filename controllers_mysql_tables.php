@@ -14,7 +14,7 @@ class Tables extends CI_Controller {
 		$data['files_message']  = $this -> Tables_model -> files();
 		$data['table_name']  = $this -> Tables_model -> table_name();
 		$data['show_tables'] = $this -> Tables_model -> show_tables();
-		$data['yield_data'] = $this->load->view('mysql/index',$data);
+		$data['yield_data'] = $this->load->view('mysql/index',$data,true);
 	    $this->load->view('layout/adminlte/index',$data);	
 	}
 
