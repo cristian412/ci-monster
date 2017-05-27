@@ -67,6 +67,8 @@ class Tables_model extends CI_Model {
         }
         $this->db->trans_complete();
         $re.= '#####################<br>Fin de las peticiones';
+        $tables = $this -> Tables_model -> table_name();
+        $this->session->set_userdata('tables', $tables);
         return $re;
       endif;
   }
@@ -125,7 +127,7 @@ class Tables_model extends CI_Model {
   public function files(){
     $orden = "SHOW FULL TABLES FROM ".DATABASE;
     $re = '';
-    $tablas = $this->Peticiones_model->peticion($orden);
+    $tablas = $this->Request_model->peticion($orden);
     for ($i=0; $i <count($tablas) ; $i++):
       $tabla = $tablas[$i]['Tables_in_'.DATABASE];
       $Tabla = ucwords($tabla);
@@ -148,7 +150,7 @@ class Tables_model extends CI_Model {
            
       $arr = ['list','show','edit','controller'];
       foreach ($arr as $value) {
-        $data = file_get_contents(FCPATH."assets/txt/".$value.".txt");
+        $data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/" .$value.".txt");
         $data = str_replace(['xxx','XXX'], [$tabla,$Tabla], $data);
         $path = FCPATH."application/views/tables/".$tabla."/".$value.".php";
         if($value=='controller')
@@ -172,7 +174,7 @@ class Tables_model extends CI_Model {
   public function table_name(){
     ############### LISTAR TABLAS DE LA BASE DE DATOS ############################################
     $q  = "SHOW FULL TABLES FROM ".DATABASE;
-    $re = $this->Peticiones_model->peticion($q);
+    $re = $this->Request_model->peticion($q);
     $tabla = array();
     for ($i=0; $i <count($re) ; $i++):
       $db = 'Tables_in_'.DATABASE;
