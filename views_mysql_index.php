@@ -78,9 +78,6 @@ for ($i=0; $i < count($r); $i++) {
 
 
 ?>
-<div class="content-wrapper">
-  <section class="content">
-
 	<?php #echo "<pre>"; print_r($tabla); echo "</pre>"; ?>
 	<?=$alerts?>
 
@@ -141,8 +138,6 @@ for ($i=0; $i < count($r); $i++) {
 		  <?=$showtables?>
 		</div>
 	</div>
-  </div>
-</div>
 
 
 <script>
