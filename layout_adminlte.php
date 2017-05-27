@@ -9,10 +9,12 @@ if(!isset($yield_sidevar)) $yield_sidebar = '<li> <a href="#"><i class="fa fa-th
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8">  
   <title><?=APPNAME?></title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="<?=URL?>favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
@@ -67,7 +69,7 @@ if(!isset($yield_sidevar)) $yield_sidebar = '<li> <a href="#"><i class="fa fa-th
     </section><!-- /.content -->
   </div><!-- /.content-wrapper -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2017 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong>  reserved.
+    <strong>Copyright &copy; 2014-2016 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong>  reserved.
     <div class="pull-right hidden-xs"> <b>Version</b> 2.3.8 </div>
   </footer>
 </div><!-- ./wrapper -->
