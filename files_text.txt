@@ -1,0 +1,91 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class XXX extends CI_Controller {
+
+	private $tabla = 'xxx';
+
+	public function index(){
+		$data['update'] = $this -> Request_model -> update();
+		$data['fields'] = $this -> Request_model -> form($this->tabla,'new',URL.$this->tabla);
+		$data['lista']  = $this -> Request_model -> grid($this->tabla);
+		$data['yield_data'] = $this->load->view('tables/'.$this->tabla.'/list',$data,true);
+	    $this->load->view('layout/adminlte/index',$data);	
+	}
+	public function show(){
+		$id = $this->uri->segment(3);
+		$data['update'] = $this -> Request_model -> update();
+		$data['fields'] = $this -> Request_model -> form($this->tabla,$id);
+		$data['lista']  = $this -> Request_model -> item($this->tabla,$id);
+		$data['yield_data'] = $this->load->view('tables/'.$this->tabla.'/show',$data,true);
+		$this->load->view('layout/adminlte/index',$data);
+	}
+	public function edit(){
+		$id = $this->uri->segment(3);
+		if(empty($id)) $id = 'new';
+		$data['fields'] = $this -> Request_model -> form($this->tabla,$id);
+		$data['yield_data'] = $this->load->view('tables/'.$this->tabla.'/edit',$data,true);
+		$this->load->view('layout/adminlte/index',$data);
+	}
+
+}
+&&&
+<?php
+# SETEAR EL FORMULARIO
+//$fields['nro']['col'] = '1';
+
+$formulario = formbasico($fields);
+
+?>
+<h1>Edit <?=$fields['tabla']['value']?></h1>
+
+<?=$formulario?>
+
+&&&
+<?php
+$tabla = $lista['meta']['tabla'];
+
+# SETEAMOS LA LISTA
+//unset($lista['columna']['id_juicio']);
+$li = listasimple($lista);
+
+
+
+# SETEAR EL FORMULARIO
+//$fields['nro']['col'] = '1';
+
+$formulario = formbasico($fields);
+$modal = modal($formulario);
+?>
+  <?=$update?>
+  <h1>
+    Lista <?=ucwords($tabla)?>
+    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#editar-item">Agregar con Modal</a>
+    <a href="<?=URL.$tabla?>/edit/new" class="btn btn-success">Agregar</a>
+  </h1>
+  <?//=pre($lista)?>
+
+  <?=$li?>
+
+<?=$modal?>
+
+&&&
+<?php
+foreach ($lista as $key => $value) $$key = $value;
+
+# SETEAR EL FORMULARIO
+//$fields['nro']['col'] = '1';
+
+
+$formulario = formbasico($fields);
+$modal = modal($formulario);
+?>
+<?=$update?>
+<h1>Show <?=ucwords( $tabla ) ?> 
+	<a href="#" class="btn btn-success" data-toggle="modal" data-target="#editar-item">Editar</a>
+</h1>
+
+<?=pre($lista)?>
+
+
+<?=$modal?>
