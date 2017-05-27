@@ -136,9 +136,11 @@ class Request_model extends CI_Model {
 			// Default element type
 			$element = 'input';
 			$type = '';
+			if(stristr($colType, 'varchar')) $type = 'text';
 			if(stristr($colType, 'int')) $type = 'number';
 			if(stristr($colName, '_id')) $element = 'select';
 			if(stristr($colName, 'id_')) $type = 'hidden';
+			if(stristr($colName, 'file_') or $colName=='file') $type = 'file';
 			if(stristr($colComment, 'checkbock')) $element = 'checkbox';
 			if($colDataType=='decimal') $type = 'number';
 			if($colType=='date') $type = 'date';
@@ -147,7 +149,6 @@ class Request_model extends CI_Model {
 			if($colType=='timestamp') $type = 'hidden';
 			if($colType=='mediumtext') $element = 'textarea';
 			if($colType=='text' ) $element = 'textarea';
-			if(stristr($colType, 'varchar')) $type = 'text';
 
 
 			################### VALUE #################################################################
