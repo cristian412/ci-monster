@@ -223,8 +223,7 @@ function formbasico($fields,$id_dom=''){
 	              id='$name'
 	              onFocus=\"this.style.backgroundColor='#FFFFBB'\"
 	              name='$name'
-	                $autofocus
-	                $required 
+	                $atributes
 	            >$value</textarea>
 	          </div>";
 	      endif;
