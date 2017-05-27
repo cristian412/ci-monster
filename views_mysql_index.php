@@ -115,7 +115,7 @@ for ($i=0; $i < count($r); $i++) {
 			<div class="alert alert-default" role="alert">
 			  <!-- SEGUNDA PARTE - AGREGAR TABLA -->
 
-			    <form action="<?=URL?>tables" method="post">
+			    <form action="<?=URL?>mysql/tables" method="post">
 			      <textarea name="creartabla" cols="100" rows="6"></textarea>
 			      <br>
 			      <button type="submit">Aceptar</button>
@@ -125,8 +125,8 @@ for ($i=0; $i < count($r); $i++) {
 		<div class="tab-pane" id="yellow">
 			<div class="alert alert-primary" role="alert">
 			  <!-- TERCERA PARTE - AGREGAR COLUMNA -->
-			    <form action="<?=URL?>tables" method="post">
-			      <label>TABLE </label>  <select name="agrcol_tabla"  id="agrcol_tabla" ><?=$li_tabla?></select>
+			    <form action="<?=URL?>mysql/tables" method="post">
+			      <label>TABLE </label>  <select name="agrcol_tabla"  id="agrcol_tabla" ><option>Select</option><?=$li_tabla?></select>
 			      <label>COLUMNAME</label>  <input name="agrcol_col"  id="agrcol_col" required> 
 			      <label>AFTER</label>  <select  name="agrcol_after" id="agrcol_after">  </select>
 			      <br><br>
