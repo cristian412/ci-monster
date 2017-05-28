@@ -508,11 +508,12 @@ class Request_model extends CI_Model {
 		$valores = $_POST;
 		$tabla = $valores['tabla'];
 		$id    = $valores['id_'.$tabla];
+		
+		$re = $orden = '';
 
 		$v='update';
 		if( $id=='new' ) $v='insert';
-
-		//pre($_POST);
+		echo "<br><br><br><br><br><br><br><br><br>";		pre($_POST);
 
 		####################################################
 		# OBTENEMOS LAS COLUMNAS DE LA TABLA
@@ -574,7 +575,7 @@ class Request_model extends CI_Model {
 			foreach ($valores as $key => $value):
 			  if( in_array($key, $colName) ){
 			  	$value = str_ireplace("'", "\'", $value);
-			    $orden.=($key=='id_'.$tabla)?" `$key` = '$value'":", `$key` = '$value'";
+			    $orden.=($key=='id_'.$tabla)?" `$key` = '$value'":", `$key` = '$value' ";
 			  }
 			endforeach;
 			$orden.= " WHERE `id_$tabla` = '$id' $update_u_id";
@@ -598,31 +599,80 @@ class Request_model extends CI_Model {
 
 
 		# MOVE UPLOADED FILE ############################3
-		if( isset($_FILES['file']) ){
-		  if( $_FILES['file']['error']!=4 ){
+		if( isset($_FILES) ){
+		  $folder = 'content/';
+		  $error = 0;
+		  foreach ($_FILES as $key => $value) {
+		  	if($value['error']==4)
+		  		$error=1;
+		  }
+		  if( $error!=1 ){
+
+			$path   = FCPATH.$folder.'files';
+			if(!is_dir($path)){ 
+				mkdir($path, 0777, true);
+				chmod($path, 0777);
+			}
+			$path   = FCPATH.$folder.'files/'.$tabla;
+			if(!is_dir($path)){ 
+				mkdir($path, 0777, true);
+				chmod($path, 0777);
+			}
+			foreach ($_FILES as $key => $value) {
+				$path   = FCPATH.$folder.'files/'.$tabla.'/'.$key;
+				if(!is_dir($path)){ 
+					mkdir($path, 0777, true);
+					chmod($path, 0777);
+				}
+				if( $_FILES[$key]["type"]=='image/jpeg' ) $type = '.jpg';
+				if( $_FILES[$key]["type"]=='image/png' ) $type = '.png';
+				if( $_FILES[$key]["type"]=='application/pdf' ) $type = '.pdf';
+
+				$target_file = $path.'/'.$id.$type;
+				if ( move_uploaded_file($_FILES[$key]["tmp_name"], $target_file) )
+					$re.='<br>UPLOADED FILE: '.$target_file;
+
+				// elimina los demas archivos si existen
+				if( file_exists($path.'/'.$id.'.jpg') and $type!='.jpg' ) unlink($path.'/'.$id.'.jpg');
+				if( file_exists($path.'/'.$id.'.png') and $type!='.png' ) unlink($path.'/'.$id.'.png');
+				if( file_exists($path.'/'.$id.'.pdf') and $type!='.pdf' ) unlink($path.'/'.$id.'.pdf');
+
+			}
+
+			/*
 			$target_dir = "../contenido/$tabla/";
 			$file = FCPATH."contenido/$tabla/";
-
 			if( $_FILES["file"]["type"]=='image/jpeg' ) $type = '.jpg';
 			if( $_FILES["file"]["type"]=='image/png' ) $type = '.png';
 			if( $_FILES["file"]["type"]=='application/pdf' ) $type = '.pdf';
 			$target_file = $file .$id.$type;
-			//echo "<br><br><br>ruta y nombre del archivo: ".$target_file;
-			//pre($_FILES);
 			if ( move_uploaded_file($_FILES["file"]["tmp_name"], $target_file) )
+			*/
 
-				if( file_exists(FCPATH.'/contenido/'.$tabla.'/'.$id.'.jpg') and $type!='.jpg' ) unlink(FCPATH.'/contenido/'.$tabla.'/'.$id.'.jpg');
-				if( file_exists(FCPATH.'/contenido/'.$tabla.'/'.$id.'.png') and $type!='.png' ) unlink(FCPATH.'/contenido/'.$tabla.'/'.$id.'.png');
-				if( file_exists(FCPATH.'/contenido/'.$tabla.'/'.$id.'.pdf') and $type!='.pdf' ) unlink(FCPATH.'/contenido/'.$tabla.'/'.$id.'.pdf');
-
+		  }else{
+		  	$re.='<br>HUBO UN ERROR AL INTENTAR ALZAR EL ARCHIVO';
 		  }
-		}
 
-		$_POST = array();
+		}//end if _FILES
 
-		$orden = update($orden);
+		# DELETE FILES
+		foreach ($_POST as $key => $value) {
+			if( strstr($key, 'del__')){
+				$path = str_replace('del__', '', $key);
+				$path = str_replace('_jpg', '.jpg', $path);
+				$path = str_replace('_png', '.png', $path);
+				$path = str_replace('_pdf', '.pdf', $path);
+				if( file_exists($path) ) unlink($path);
+			}
+
 		
-		return $orden;
+		}
+		$_POST = array();
+		$re.= $orden;
+
+		$respuesta = update($re);
+		
+		return $respuesta;
 	}
 
 
