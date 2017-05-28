@@ -124,7 +124,7 @@ function formbasico($fields,$id_dom=''){
     return;
 	$action = $fields['tabla']['action'];
   $tabla  = $fields['tabla']['value'];
-	$id     = $fields['id_'.$tabla]['value'];
+	$id_tabla  = $fields['id_'.$tabla]['value'];
 
   if($id_dom == '') $id_dom = "form_".$tabla;
 
@@ -179,11 +179,29 @@ function formbasico($fields,$id_dom=''){
 	            </div>";
 	        endif;
           if($type == 'file'):
+              $img = '<span class="text-info">NO EXISTE IMAGEN </span>';
+              $jpg = URL.'content/files/'.$tabla.'/'.$colName.'/'.$id_tabla.'.jpg';
+              $png = URL.'content/files/'.$tabla.'/'.$colName.'/'.$id_tabla.'.png';
+              $pdf = URL.'content/files/'.$tabla.'/'.$colName.'/'.$id_tabla.'.pdf';
+
+              $Fjpg = FCPATH.'content/files/'.$tabla.'/'.$colName.'/'.$id_tabla.'.jpg';
+              $Fpng = FCPATH.'content/files/'.$tabla.'/'.$colName.'/'.$id_tabla.'.png';
+              $Fpdf = FCPATH.'content/files/'.$tabla.'/'.$colName.'/'.$id_tabla.'.pdf';
+
+              if( file_exists($Fjpg) ) $img = "<img src='$jpg' class='img-responsive' style='margin-top:5px;'><input type='checkbox' name='del__$Fjpg'>Delete";
+              if( file_exists($Fpng) ) $img = "<img src='$png' class='img-responsive' style='margin-top:5px;'><input type='checkbox' name='del__$Fpng'>Delete";
+              if( file_exists($Fpdf) ) $img = "<span  class='text-success'>EXISTE UN <a href='$pdf' target='_blank' class='btn btn-info'>PDF</a> </span><input type='checkbox' name='del__$Fpdf'>Delete";
+
+              $btn_val = 'Chose File';
+              if( file_exists($Fjpg) or file_exists($Fpng) or file_exists($Fpdf) ) $btn_val = "Change File";
+
+
               $result .=
               "<div class='form-group form-group-sm' $labelbg >
-                <label>$label</label><br>
-               <label for='$name' class='btn btn-default'>Chose File</label>
-                <input type='file' id='$name' style='display:none'>
+                <label>$label </label><br>
+               <label for='$name' class='btn btn-default'>$btn_val</label>
+                <input type='file' id='$name' style='display:none;' name='$name'>
+                $img
               </div>
               <script>
                 document.querySelectorAll(\"[type='file']\")
@@ -277,19 +295,22 @@ function formbasico($fields,$id_dom=''){
 }
 function update($update){
     $update = str_replace(',', ', ', $update);
+    $update = str_replace('"', '', $update);
+    $sustituye = array("\r\n", "\n\r", "\n", "\r");
+    $update = str_replace($sustituye, "", $update); 
     $update = '
     <script>
     setTimeout(function() {
         $.bootstrapGrowl(
-        "<span style=\"color:white;font-size:2em;\">UPDATE SUCCESSFULL</span><p>'.$update.'</p>", {
-  ele: "body", // which element to append to
-  type: "success", // (null, "info", "danger", "success")
-  offset: {from: "top", amount: 35}, // "top", or "bottom"
-  align: "right", // ("left", "right", or "center")
-  width: 550, // (integer, or "auto")
-  height: 350, // (integer, or "auto")
-  delay: 4000, // Time while the message will be displayed. It"s not equivalent to the *demo* timeOut!
-  allow_dismiss: true // If true then will display a cross to close the popup.
+        "<span style=\"color:white;font-size:2em;\">UPDATE SUCCESSFULL</span><p>'.$update.'</p>", 
+        { ele: "body", // which element to append to
+          type: "success", // (null, "info", "danger", "success")
+          offset: {from: "top", amount: 35}, // "top", or "bottom"
+          align: "right", // ("left", "right", or "center")
+          width: 550, // (integer, or "auto")
+          height: 350, // (integer, or "auto")
+          delay: 4000, // Time while the message will be displayed. It"s not equivalent to the *demo* timeOut!
+          allow_dismiss: true // If true then will display a cross to close the popup.
         });
     }, 500);
     </script>
