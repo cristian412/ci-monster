@@ -513,7 +513,7 @@ class Request_model extends CI_Model {
 
 		$v='update';
 		if( $id=='new' ) $v='insert';
-		echo "<br><br><br><br><br><br><br><br><br>";		pre($_POST);
+		//echo "<br><br><br><br><br><br><br><br><br>";		pre($_POST);
 
 		####################################################
 		# OBTENEMOS LAS COLUMNAS DE LA TABLA
