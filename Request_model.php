@@ -389,11 +389,21 @@ class Request_model extends CI_Model {
 		$path = URL.$tabla;
 		if( $this->uri->segment(1) == 'tables' ) $path = URL.'tables/'.$tabla;;
 
+		/*
+		images options:
+		
+		UNICODE: 📂 ✎
+
+		CDN <img src="https://maxcdn.icons8.com/office/PNG/16/Very_Basic/open_folder-16.png" title="Open Folder" width="16" height="16">
+		CDN <img src="https://maxcdn.icons8.com/office/PNG/16/Very_Basic/edit-16.png" title="Edit" width="16" height="16">
+
+		*/ 
+
 		for ($i=0; $i <count($r); $i++) { 
 			$reg = $r[$i];
 	        $id = $r[$i]['id_'.$tabla];
-		    $abrir  = ['abrir'=> '<a href="'.$path.'/show/'.$id.'">📂</a>'];
-		    $editar = ['editar'=> '<a href="'.$path.'/edit/'.$id.'">✎</a>'];
+		    $abrir  = ['abrir'=> '<a href="'.$path.'/show/'.$id.'"><img src="https://maxcdn.icons8.com/office/PNG/16/Very_Basic/open_folder-16.png" title="Open Folder" width="16" height="16"></a>'];
+		    $editar = ['editar'=> '<a href="'.$path.'/edit/'.$id.'"><img src="https://maxcdn.icons8.com/office/PNG/16/Very_Basic/edit-16.png" title="Edit" width="16" height="16"></a>'];
 
 			$reg = $abrir+$reg;				
 			$reg = $reg+$editar;
@@ -677,4 +687,3 @@ class Request_model extends CI_Model {
 
 
 } // END CLASS //
-
