@@ -88,7 +88,6 @@ function formbasico($fields,$id_dom=''){
           $divbg = $labelbg = $pre = $post = '';
           if( array_key_exists('divbg', $style) ) $divbg = ' style="background-color: '.$style['divbg'].';" ';
           if( array_key_exists('labelbg', $style) ) $labelbg = ' style="background-color: '.$style['labelbg'].';" ';
-          if( array_key_exists('labelcolor', $style) ) $labelcolor = ' style="color: '.$style['labelcolor'].';" ';
           if( array_key_exists('pre', $style) ) $pre = $style['pre'];
           if( array_key_exists('post', $style) ) $post = $style['post'];
 
