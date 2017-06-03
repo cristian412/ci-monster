@@ -67,58 +67,6 @@ function pre($v){
   echo"</pre></div>";
 }
 
-function listaJqgrid($lista){
-  if( !isset($lista['columna']) ){
-      $t = array();
-      @$t = $lista[0];
-      foreach ($t as $key => $value) {
-        $colName  = "$key";
-        $v = "$key";
-        $v = str_replace('_', ' ', $v);
-        $v = ucwords($v);
-        @$t[$key] = ['label'=>$v,'name'=>$colName,'width'=>'40','sortype'=>'varchar','align'=>'left'];
-      }
-    $lista['columna'] = $t;
-    $lista['contenido'] = $lista;
-  }
-
-  unset($lista['columna']['u']);
-  $lista['columna'] = array_values($lista['columna']);
-  $t = json_encode($lista['columna']);
-  $c = json_encode($lista['contenido']);
-  $r ='
-  <script>
-    var titulo = '.$t.';
-    var contenido = '.$c.';
-  </script>
-  <table class="table" id="jqGrid"></table>
-  <div id="jqGridPager" style="height:50px;"></div>
-  <script>
-    $("#jqGrid").jqGrid({
-          data: contenido,
-          datatype: "local",
-          page: 1,
-          colModel: titulo,
-          loadonce: true,
-          viewrecords: true,
-          rowNum: 10,
-          pager: "#jqGridPager",
-          hoverrows: true,
-          autowidth: true,
-          height: "auto"
-      });
-      $("#jqGrid").navGrid("#jqGridPager", {                
-          search: true, add: false,edit: false, del: false, refresh: true},
-          {}, // edit options
-          {}, // add options
-          {}, // delete options
-          { multipleSearch: false }
-          );
-
-  </script>';
-  return $r;
-
-}
 function formbasico($fields,$id_dom=''){
   if(empty($fields))
     return;
@@ -140,6 +88,7 @@ function formbasico($fields,$id_dom=''){
           $divbg = $labelbg = $pre = $post = '';
           if( array_key_exists('divbg', $style) ) $divbg = ' style="background-color: '.$style['divbg'].';" ';
           if( array_key_exists('labelbg', $style) ) $labelbg = ' style="background-color: '.$style['labelbg'].';" ';
+          if( array_key_exists('labelcolor', $style) ) $labelcolor = ' style="color: '.$style['labelcolor'].';" ';
           if( array_key_exists('pre', $style) ) $pre = $style['pre'];
           if( array_key_exists('post', $style) ) $post = $style['post'];
 
