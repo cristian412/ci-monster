@@ -444,11 +444,11 @@ class Request_model extends CI_Model {
 		$r = $this->db->query($q)->result();
 		$t = json_decode( json_encode( $r ), true );
 		#############################################################################################
-		# SANEAMOS TABLA E ID
-		if( !is_numeric($id) )
-			return;
-		#4 empezamos a crear el query con el seteo inicial y el recorrido del array $t
+		# verificamos si es 
 		$where   = " WHERE id_$tabla = $id ";
+		if( !is_numeric($id) )
+			$where = " WHERE ".$id;
+		#4 empezamos a crear el query con el seteo inicial y el recorrido del array $t
 		$q = 'SELECT ';
 		$from = ' FROM '.$tabla.' ';
 
