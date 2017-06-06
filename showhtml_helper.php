@@ -99,6 +99,8 @@ function formbasico($fields,$id_dom=''){
 		  if( $type == 'hidden' ) $abreDiv   = '';
 		  if( $type == 'hidden' ) $cierraDiv   = '';
 	      $result .= $abreDiv;
+	
+        	$value = str_ireplace("'", "`", $value);
 
 	      # INPUT METHOD XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	      if($element=='input'):
