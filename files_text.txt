@@ -65,13 +65,13 @@ else
 # SETEAR EL FORMULARIO
 //$fields['nro']['col'] = '1';
 $formulario = formbasico($fields);
-$modal = modal($formulario);
+$modal = modal($formulario,'modal_editar');
 
 ?>
 <?=$update?>
 <h1>
 	Lista <?=ucwords($lista['meta']['tabla'])?>
-	<a href='#' class='btn btn-success' data-toggle='modal' data-target='#editar-item'>Agregar con Modal</a>
+	<a href='#' class='btn btn-success' data-toggle='modal' data-target='#modal_editar'>Agregar con Modal</a>
 	<a href='<?=$add_url?>' class='btn btn-success'>Agregar</a>
 </h1>
 <?//=pre($lista)?>
