@@ -126,6 +126,8 @@ class Tables_model extends CI_Model {
   
   public function files(){
     $orden = "SHOW FULL TABLES FROM ".DATABASE;
+    $a = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/files_text.txt");
+    $files_text = explode('&&&', $a);
     $re = '';
     $tablas = $this->Request_model->peticion($orden);
     for ($i=0; $i <count($tablas) ; $i++):
@@ -149,10 +151,8 @@ class Tables_model extends CI_Model {
            }
            
       $arr = ['0'=>'controller','1'=>'edit','2'=>'list','3'=>'show'];
-      $a = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/files_text.txt");
-      $texto = explode('&&&', $a);
       foreach ($arr as $key => $value) {
-        $data = str_replace(['xxx','XXX'], [$tabla,$Tabla], $texto[$key]);
+        $data = str_replace(['xxx','XXX'], [$tabla,$Tabla], $files_text[$key]);
         $path = FCPATH."application/views/tables/".$tabla."/".$value.".php";
         if($value=='controller')
           $path = FCPATH."application/controllers/tables/".$Tabla.".php";
