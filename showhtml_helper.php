@@ -39,8 +39,9 @@ function listaSimple($lista,$js='dataTables',$id_dom=''){
 	$r.= '
 	    <script>
 	    $("#grid_'.$id_dom.'").DataTable( {
-		"language": { "url":     "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json" }
-	    } );
+		"language": { "url":     "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json" },
+		"pageLength": 50
+	     } );
 	    </script>
 	    ';
     // Empty Message
