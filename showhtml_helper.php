@@ -20,7 +20,7 @@ function listaSimple($lista,$js='dataTables',$id_dom=''){
     }
 
     // empieza a crear la tabla  
-    $r = '<table id="grid_'.$id_dom.'" class="table table-striped table-hover table-bordered table-responsive">';
+    $r = '<div class="table-responsive"><table id="grid_'.$id_dom.'" class="table table-striped table-hover table-bordered table-responsive">';
     // Table head
     $r.= '<thead class="thead-inverse">';
     foreach ($t as $value) $r.= "<th>".$value."</th>";
@@ -33,7 +33,7 @@ function listaSimple($lista,$js='dataTables',$id_dom=''){
       $r.= "</tr>";
     endforeach;
     $r .= '</tbody>';
-    $r .= '</table>';
+    $r .= '</table></div>';
     // Script DataTables
     if($js=='dataTables')
 	$r.= '
