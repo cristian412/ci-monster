@@ -212,7 +212,7 @@ function formbasico($fields,$id_dom=''){
 	        $result .= "
 	          <div class='form-group form-group-sm' $labelbg>
 	            <label for='$name'>$label</label>
-	            <select name='$name' class='form-control' id='$name' $atributes
+	            <select name='$name' class='form-control' id='$name' $atributes required
 	            onFocus=\"this.style.backgroundColor='#FFFFBB'\" >
 	              <option value=''>Seleccione</option>";
 
