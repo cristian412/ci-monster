@@ -268,17 +268,16 @@ function update($update){
     ';
   return $update;
 }
-function modal($data,$title='MODAL'){
-  if( $title == 'MODAL' and stristr($data, "id='form_" ) )
-    $title = 'EDITAR ITEM';
-  $id_dom = str_replace(' ', '-', strtolower($title) );
+function modal($data,$title='editar_item'){
+  $titulo = ucwords( str_replace(['_','modal'], [' ',''], $title) );
+
   $html = '
-  <div class="modal fade"  data-backdrop="static" data-keyboard="false" tabindex="-1" id="'.$id_dom.'" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal fade"  data-backdrop="static" data-keyboard="false" tabindex="-1" id="'.$title.'" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog  modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">'.$title.'</h4>
+          <h4 class="modal-title">'.$titulo.'</h4>
         </div>
         <div class="modal-body">'.
           $data.
