@@ -62,7 +62,7 @@ $li.='</div>';
             <span class="info-box-icon bg-black">&#127758;</span>
             <div class="info-box-content">
               <span class="info-box-text">Website</span>
-              <span class="info-box-number"><a href="www.cgambiental.com.py/basement">cgambiental.com.py/ basement</a></span>
+              <span class="info-box-number"><a href="www.websyscamp.com/projects">websyscamp.com/ projects</a></span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -73,8 +73,8 @@ $li.='</div>';
           <div class="info-box">
             <span class="info-box-icon bg-light-blue"><i class="fa fa-sign-out"></i></span>
             <div class="info-box-content">
-              <span class="info-box-text">Sing Out</span>
-              <span class="info-box-number"><a href="<?=URL?>users/sing_out">link</a></span>
+              <span class="info-box-text">Sign Out</span>
+              <span class="info-box-number"><a href="<?=URL?>users/sign_out">link</a></span>
             </div>
             <!-- /.info-box-content -->
           </div>
