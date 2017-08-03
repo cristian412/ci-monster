@@ -103,7 +103,7 @@ if(!isset($yield_sidevar)) $yield_sidebar = '<li> <a href="#"><i class="fa fa-th
     </section><!-- /.content -->
   </div><!-- /.content-wrapper -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2016 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong>  reserved.
+    <strong>Copyright &copy; 2014-2016 <a href="http://almsaeedstudio.com" target="_blank">Almsaeed Studio</a>.</strong>  reserved.
     <div class="pull-right hidden-xs"> <b>Version</b> 2.3.8 </div>
   </footer>
 </div><!-- ./wrapper -->
