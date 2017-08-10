@@ -27,18 +27,27 @@ class Request_model extends CI_Model {
 
 
 	public function last($tabla){
-		$u = $this->session->userdata('u');
-		if(empty($u)) return;
 
-		$orden = "SELECT * FROM $tabla where u_id = $u order by id_$tabla desc limit 1";
+		$orden = "SELECT * FROM $tabla order by id_$tabla desc limit 1";
 		$q = $this->db->query($orden)->result();
 		$r = json_decode( json_encode( $q ), true );
-		if( count($r) == 0 ) return;
+
+		if( count($r) == 0 ){
+			$q = $this->db->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
+				WHERE table_schema = '".DATABASE."' and TABLE_NAME = '$tabla' ")->result();
+			$t = json_decode( json_encode( $q ), true );
+			for ($i=0; $i <count($t) ; $i++) { 
+				$atributo = $t[$i]['COLUMN_NAME'];
+				$re[$atributo] = '';
+			}
+			return $re;
+		}
 
 		$result = $r[0];
 
 		return $result;
 	}
+
 
 
 
