@@ -75,10 +75,10 @@ function formbasico($fields,$id_dom=''){
   $tabla  = $fields['tabla']['value'];
 	$id_tabla  = $fields['id_'.$tabla]['value'];
 
-  if($id_dom == '') $id_dom = "form_".$tabla;
+  if($id_dom == '') $id_dom = $tabla;
 
   $result = "<div class='row'>
-  <form role='form' class='form' enctype='multipart/form-data' action='$action' method='post' id='$id_dom' >";
+  <form class='form' enctype='multipart/form-data' action='$action' method='post' id='{$id_dom}_form' >";
 	    foreach ($fields as $v):
         
 	      #### CREA LAS VARIABLES INDIVIDUALES 
@@ -93,7 +93,7 @@ function formbasico($fields,$id_dom=''){
           if( array_key_exists('post', $style) ) $post = $style['post'];
 
 
-          $abreDiv   = "<div class='col-md-$col $display' id='div_$name'  $divbg > $pre";
+          $abreDiv   = "<div class='col-md-$col $display' id='{$id_dom}_div_{$name}'  $divbg > $pre";
           $cierraDiv = "$post </div>";
 
 
@@ -111,15 +111,15 @@ function formbasico($fields,$id_dom=''){
             $type = 'text';
           }
 	        if($type=='hidden')
-				    $result .= "<input type='hidden' name='$name' value='$value' >"; 
+				    $result .= "<input type='hidden' name='{$name}' value='$value' >"; 
 
 	        if($type!='hidden' and $element!='checkbox' and $type!='submit' and $type!='file'):
 	            $result .=
 	            "<div class='form-group form-group-sm' $labelbg >
-	              <label for='$name'>$label</label>
+	              <label for='{$id_dom}_{$name}' id='{$id_dom}_label_{$name}'>$label</label>
 	              <input class='form-control inputGris'
                   $addCommas
-	                id='$name'
+	                id='{$id_dom}_{$name}'
 	                onFocus=\"this.style.backgroundColor='#FFFFBB'\"
 	                type='$type' 
 	                name='$name'
@@ -150,8 +150,8 @@ function formbasico($fields,$id_dom=''){
               $result .=
               "<div class='form-group form-group-sm' $labelbg >
                 <label>$label </label><br>
-               <label for='$name' class='btn btn-default'>$btn_val</label>
-                <input type='file' id='$name' style='display:none;' name='$name'>
+               <label for='{$id_dom}_{$name}' class='btn btn-default'>$btn_val</label>
+                <input type='file' id='{$id_dom}_{$name}' style='display:none;' name='$name'>
                 $img
               </div>
               <script>
@@ -175,8 +175,8 @@ function formbasico($fields,$id_dom=''){
           if($type == 'submit'):
               $result .=
               "<div class='form-group form-group-sm' $labelbg >
-               <label for='$name'>$label</label><br>
-                <button class='btn btn-primary' type='submit' id='$name'>$value</button>
+               <label for='{$id_dom}_{$name}' id='{$id_dom}_label_{$name}' >$label</label><br>
+                <button class='btn btn-primary' type='submit' id='{$id_dom}_{$name}'>$value</button>
               </div>";
 
 
@@ -187,9 +187,9 @@ function formbasico($fields,$id_dom=''){
 	      if($element == 'textarea'):
 	        $result .= "
 	          <div class='form-group form-group-sm' $labelbg >
-	            <label for='$name'>$label </label>
+	            <label for='{$id_dom}_{$name}' id='{$id_dom}_label_{$name}'>$label </label>
 	            <textarea rows='4' cols='100' style='width:100%'
-	              id='$name'
+	              id='{$id_dom}_{$name}'
 	              onFocus=\"this.style.backgroundColor='#FFFFBB'\"
 	              name='$name'
 	                $atributes
@@ -202,8 +202,8 @@ function formbasico($fields,$id_dom=''){
 	        $ckd = '';
 		    if($value == 1) $ckd=' checked ';
 	        $result .= "<div class='form-group form-group-sm' $labelbg>";
-			$result .= "<label for='$name'>$label</label>";
-            $result .= "<input type='checkbox' class='form-control' name='$name' id='$name value='1' $ckd/></div>";
+			$result .= "<label for='{$name}'>$label</label>";
+            $result .= "<input type='checkbox' class='form-control' name='$name' id='{$id_dom}_{$name}' value='1' $ckd/></div>";
 	      endif; 
 
 
@@ -211,8 +211,8 @@ function formbasico($fields,$id_dom=''){
 	      if($element == 'select'):
 	        $result .= "
 	          <div class='form-group form-group-sm' $labelbg>
-	            <label for='$name'>$label</label>
-	            <select name='$name' class='form-control' id='$name' $atributes required
+	            <label for='{$id_dom}_{$name}' id='{$id_dom}_label_{$name}'>$label</label>
+	            <select name='$name' class='form-control' id='{$id_dom}_{$name}' $atributes required
 	            onFocus=\"this.style.backgroundColor='#FFFFBB'\" >
 	              <option value=''>Seleccione</option>";
 
