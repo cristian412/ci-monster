@@ -21,33 +21,62 @@ function listaSimple($lista,$js='dataTables',$id_dom=''){
 
     // empieza a crear la tabla  
     $r = '<div class="table-responsive"><table id="grid_'.$id_dom.'" class="table table-striped table-hover table-bordered table-responsive">';
-    // Table head
-    $r.= '<thead class="thead-inverse">';
-    foreach ($t as $value) $r.= "<th>".$value."</th>";
-    $r .= '</thead>';
-    // Table Body
-    $r .= '<tbody>';
-    foreach ($c as $value):
-      $r .= "<tr>";
-      foreach ($t as $k => $v) $r.= "<td>".$value[$k]."</td>";
-      $r.= "</tr>";
-    endforeach;
+
+    if($js==''):
+      // Table head
+      $r.= '<thead class="thead-inverse">';
+      foreach ($t as $value) $r.= "<th>".$value."</th>";
+      $r .= '</thead>';
+      // Table Body
+      $r .= '<tbody>';
+      foreach ($c as $value):
+        $r .= "<tr>";
+        foreach ($t as $k => $v) $r.= "<td>".$value[$k]."</td>";
+        $r.= "</tr>";
+      endforeach;
+    endif;
+
     $r .= '</tbody>';
     $r .= '</table></div>';
+
     // Script DataTables
-    if($js=='dataTables')
-	$r.= '
-	    <script>
-	    $("#grid_'.$id_dom.'").DataTable( {
-    		"language": { "url":     "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json" },
-    		"pageLength": 50
-	     } );
-		$("table > tbody > tr").click(function(){
-		$("table tbody tr").removeClass("success");
-		$(this).addClass("success");
-	      });       
-	    </script>
-	    ';
+    if($js=='dataTables'):
+      // json para datatables
+      // columns
+      $columns = array();
+      foreach ($t as $value) $columns[] = ["title" => $value];
+      $columns = json_encode($columns);
+      // data set
+      $dataSet = array();
+      foreach ($c as $key => $value):
+        $cval = array();
+        foreach ($value as $ckey => $cvalue) $cval[] = $cvalue;
+        $dataSet[] = $cval;
+      endforeach;
+      $dataSet = json_encode($dataSet);
+    	$r.= '
+  	    <script>
+        // "language": { "url":     "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json" },
+  	    $("#grid_'.$id_dom.'").DataTable( {
+      		"pageLength": 50,
+          "data": '.$dataSet.',
+          "columns": '.$columns.'
+  	     } );
+  		$("table > tbody > tr").click(function(){
+  		$("table tbody tr").removeClass("warning");
+  		$(this).addClass("warning");
+  	      });       
+  	    </script>
+  	    ';
+    endif;
+      $r.= '
+        <script>
+          $("table > tbody > tr").click(function(){
+            $("table tbody tr").removeClass("warning");
+            $(this).addClass("warning");
+          });       
+        </script>';
+        
     // Empty Message
     if( count($lista['contenido']) == 0 )
       $r = '<div class="alert alert-dismissible alert-warning">
