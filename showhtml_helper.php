@@ -8,8 +8,9 @@ function listaSimple($lista,$js='dataTables',$id_dom=''){
         $id_dom = str_replace('id_', '', $lista['columna'][$a]['name'] ); // guardamos el nombre de la tabla como $id_dom
       }
       // recorremos las columnas para guardar los titulos en la variable t
+      $t = array();
       foreach ($lista['columna'] as $key => $value)
-        if($key!='u_id') $t[$key] = $value['label']; // se carga si no es u_id
+        $t[$key] = $value['label']; // se carga los labels
       // guardamos el contenido en la variable c
       $c = $lista['contenido'];
     }else{
@@ -44,30 +45,30 @@ function listaSimple($lista,$js='dataTables',$id_dom=''){
       // json para datatables
       // columns
       $columns = array();
-      foreach ($t as $value) $columns[] = ["title" => $value];
+      foreach ($t as $t_value) $columns[] = ["title" => $t_value];
       $columns = json_encode($columns);
       // data set
       $dataSet = array();
       foreach ($c as $key => $value):
         $cval = array();
-        foreach ($value as $ckey => $cvalue) $cval[] = $cvalue;
+        foreach ($t as $tkey => $cvalue) $cval[] = $value[$tkey];
         $dataSet[] = $cval;
       endforeach;
       $dataSet = json_encode($dataSet);
-    	$r.= '
-  	    <script>
+      $r.= '
+        <script>
         // "language": { "url":     "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json" },
-  	    $("#grid_'.$id_dom.'").DataTable( {
-      		"pageLength": 50,
+        $("#grid_'.$id_dom.'").DataTable( {
+          "pageLength": 50,
           "data": '.$dataSet.',
           "columns": '.$columns.'
-  	     } );
-  		$("table > tbody > tr").click(function(){
-  		$("table tbody tr").removeClass("warning");
-  		$(this).addClass("warning");
-  	      });       
-  	    </script>
-  	    ';
+         } );
+      $("table > tbody > tr").click(function(){
+      $("table tbody tr").removeClass("warning");
+      $(this).addClass("warning");
+          });       
+        </script>
+        ';
     endif;
       $r.= '
         <script>
@@ -86,7 +87,7 @@ function listaSimple($lista,$js='dataTables',$id_dom=''){
           </div>
           ';
 
-	return $r;
+  return $r;
 }
 
 function consola($q){
