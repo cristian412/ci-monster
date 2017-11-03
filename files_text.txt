@@ -11,17 +11,17 @@ class XXX extends CI_Controller {
 		$data['lista']  = $this -> Request_model -> grid($tabla);
 
 		$tabla = $data['lista']['meta']['tabla'];
-		$add_url = $data['fields']['tabla']['action'].'/edit/new';
+		$data['add_url'] = $data['fields']['tabla']['action'].'/edit/new';
 		# SETEAMOS LA LISTA
 		//unset($lista['columna']['id_juicio']);
 		if( count($data['lista']['contenido'])<10  )
-			$li = listasimple($data['lista'],'','');
+			$data['li'] = listasimple($data['lista'],'','');
 		else
-			$li = listasimple($data['lista']);
+			$data['li'] = listasimple($data['lista']);
 		# SETEAR EL FORMULARIO
 		//$fields['nro']['col'] = '1';
 		$formulario = formbasico($data['fields']);
-		$modal = modal($formulario,'modal_editar');
+		$data['modal'] = modal($formulario,'modal_editar');
 
 		$data['yield_data'] = $this->load->view('tables/'.$tabla.'/list',$data,true);
 	    $this->load->view(LAYOUT.'index',$data);	
