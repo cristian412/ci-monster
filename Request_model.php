@@ -154,7 +154,7 @@ class Request_model extends CI_Model {
 			if($colDataType=='decimal') $type = 'number';
 			if($colType=='date') $type = 'date';
 			if($colType=='time') $type = 'time';
-			if($colType=='datetime') $type = 'datetime';
+			if($colType=='datetime') $type = 'datetime-local';
 			if($colType=='timestamp') $type = 'hidden';
 			if($colType=='mediumtext') $element = 'textarea';
 			if($colType=='text' ) $element = 'textarea';
