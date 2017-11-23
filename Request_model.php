@@ -222,9 +222,9 @@ class Request_model extends CI_Model {
 				endforeach;
 			else:
 				$col = 3;
-				if($type   == 'number' )$col = 2;
+				if($type   == 'number' )$col = 3;
 				if($type   == 'date' )  $col = 3;
-				if($type   == 'time' )  $col = 2;
+				if($type   == 'time' )  $col = 3;
 				if($element=='checkbox')$col = 1;
 				if($type   == 'hidden' )$col = 0;
 			endif;
