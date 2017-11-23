@@ -223,7 +223,7 @@ class Request_model extends CI_Model {
 			else:
 				$col = 3;
 				if($type   == 'number' )$col = 2;
-				if($type   == 'date' )  $col = 2;
+				if($type   == 'date' )  $col = 3;
 				if($type   == 'time' )  $col = 2;
 				if($element=='checkbox')$col = 1;
 				if($type   == 'hidden' )$col = 0;
