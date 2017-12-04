@@ -52,7 +52,7 @@ class Tables_model extends CI_Model {
           $creartablas.= '  id_'.$value.' INTEGER(10) PRIMARY KEY AUTO_INCREMENT ';
           $creartablas.= ',  nombre_'.$value.' VARCHAR(99) ';
           $creartablas.= ',  detalle_'.$value.' VARCHAR(99) ';
-          $creartablas.= '); ';
+          $creartablas.= ') ENGINE = InnoDB; ';
         endforeach;
         $crear .= $fk.') ENGINE = InnoDB;';
 
