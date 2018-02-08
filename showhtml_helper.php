@@ -5,7 +5,7 @@ function listaSimple($lista,$js='dataTables',$id_dom=''){
         # id_dom
         next($lista['columna']); //llevamos el puntero del array al siguiente elmento
         $a = key($lista['columna']); //obtenemos el key que necesitamos ej. id_tabla
-        $id_dom = str_replace('id_', '', $lista['columna'][$a]['name'] ); // guardamos el nombre de la tabla como $id_dom
+        $id_dom = str_replace('id_', '', $lista['columna'][$a]['name'] ); // guardamos el name de la tabla como $id_dom
       }
       // recorremos las columnas para guardar los titulos en la variable t
       $t = array();
@@ -253,7 +253,7 @@ function formbasico($fields,$id_dom=''){
 	              $vt = str_ireplace('_id', '', $name);
 	              for ($i=0; $i < count($option); $i++): 
 	                $optionId = $option[$i]['id_'.$vt];
-	                $optionTx = $option[$i]['nombre_'.$vt];
+	                $optionTx = $option[$i]['name_'.$vt];
 	                $selected = '';
 	                if( $optionId == $value ) $selected = ' selected ';
 	                $result .= "<option value='$optionId' $selected >$optionTx</option>";
