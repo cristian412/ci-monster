@@ -173,7 +173,7 @@ class Request_model extends CI_Model {
 			$option = '';
 			$ot = str_replace('_id', '', $colName);
 			if($element=='select'){
-				$varcampos = 	"id_$ot,nombre_$ot";
+				$varcampos = 	"id_$ot,name_$ot";
 				# BUSCAMOS SI TIENE EL CAMPO U_ID
 				$u = $this->session->userdata('u');
 				$usu = $this->session->userdata('usu');
@@ -330,7 +330,7 @@ class Request_model extends CI_Model {
 
 	        if( stristr($colName,'_id') ){
 	        	$a = str_replace('_id', '', $colName);
-	        	$q.= $a.'.nombre_'.$a. ' as '.$a;
+	        	$q.= $a.'.name_'.$a. ' as '.$a;
 	        	$q.= ','. $tabla.'.'.$colName.' as '.$colName;
 	        	$from.=', '.$a;
 	        	$where.=' and '.$a.'.id_'.$a.' = '.$tabla.'.'.$a.'_id';
@@ -347,7 +347,7 @@ class Request_model extends CI_Model {
 	        }
 
 			$forLabel = str_replace('_id', '', $colName); # reemplaza _id con "nada", osea borra
-			$forLabel = str_replace('_'.$tabla, '', $forLabel); # reemplaza el nombre de la tabla, osea borra
+			$forLabel = str_replace('_'.$tabla, '', $forLabel); # reemplaza el name de la tabla, osea borra
 			$forLabel = str_replace('_', ' ', $forLabel); # reemplaza _ con un espacio
 			$forLabel = ucwords($forLabel); # pone la Primera Letra en Mayuscula
 
@@ -474,7 +474,7 @@ class Request_model extends CI_Model {
 
 	        if( stristr($colName,'_id') ){
 	        	$a = str_replace('_id', '', $colName);
-	        	$q.= $a.'.nombre_'.$a. ' as '.$a;
+	        	$q.= $a.'.name_'.$a. ' as '.$a;
 	        	$q.= ','. $tabla.'.'.$colName.' as '.$colName;
 	        	$from.=', '.$a;
 	        	$where.=' and '.$a.'.id_'.$a.' = '.$tabla.'.'.$a.'_id';
