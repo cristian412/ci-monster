@@ -50,8 +50,8 @@ class Tables_model extends CI_Model {
           $fk.=', FOREIGN KEY('.$value.'_id) REFERENCES '.$value.'(id_'.$value.') '; 
           $creartablas.= 'CREATE TABLE  IF NOT EXISTS '.$value.' ( ';
           $creartablas.= '  id_'.$value.' INTEGER(10) PRIMARY KEY AUTO_INCREMENT ';
-          $creartablas.= ',  nombre_'.$value.' VARCHAR(99) ';
-          $creartablas.= ',  detalle_'.$value.' VARCHAR(99) ';
+          $creartablas.= ',  name_'.$value.' VARCHAR(99) ';
+          $creartablas.= ',  detail_'.$value.' VARCHAR(99) ';
           $creartablas.= ') ENGINE = InnoDB; ';
         endforeach;
         $crear .= $fk.') ENGINE = InnoDB;';
@@ -103,8 +103,8 @@ class Tables_model extends CI_Model {
       if($tablas!=''):
         $creartablas.= 'CREATE TABLE  IF NOT EXISTS '.$tablas.' ( ';
         $creartablas.= '  id_'.$tablas.' INTEGER(10) PRIMARY KEY AUTO_INCREMENT ';
-        $creartablas.= ', nombre_'.$tablas.' VARCHAR(99) ';
-        $creartablas.= ', detalle_'.$tablas.' VARCHAR(99) ';
+        $creartablas.= ', name_'.$tablas.' VARCHAR(99) ';
+        $creartablas.= ', detail_'.$tablas.' VARCHAR(99) ';
         $creartablas.= '); ';
         $alter.= 'ALTER TABLE '.$tabla.' ADD FOREIGN KEY ('.$tablas.'_id) REFERENCES '.$tablas.'(id_'.$tablas.');';
       endif;
