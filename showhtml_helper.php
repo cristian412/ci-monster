@@ -173,10 +173,9 @@ function formbasico($fields,$id_dom=''){
               $Fpng = FCPATH.'content/files/'.$tabla.'/'.$colName.'/'.$id_tabla.'.png';
               $Fpdf = FCPATH.'content/files/'.$tabla.'/'.$colName.'/'.$id_tabla.'.pdf';
 
-              if( file_exists($Fjpg) ) $img = "<img src='$jpg' class='img-responsive' style='margin-top:5px;'><input type='checkbox' name='del__$Fjpg'>Delete";
-              if( file_exists($Fpng) ) $img = "<img src='$png' class='img-responsive' style='margin-top:5px;'><input type='checkbox' name='del__$Fpng'>Delete";
+              if( file_exists($Fjpg) ) $img = "<img src='$jpg?datetime=".date('Y-m-d H:i:s')."' class='img-responsive' style='margin-top:5px;'><input type='checkbox' name='del__$Fjpg'>Delete";
+              if( file_exists($Fpng) ) $img = "<img src='$png?datetime=".date('Y-m-d H:i:s')."' class='img-responsive' style='margin-top:5px;'><input type='checkbox' name='del__$Fpng'>Delete";
               if( file_exists($Fpdf) ) $img = "<span  class='text-success'>EXISTE UN <a href='$pdf' target='_blank' class='btn btn-info'>PDF</a> </span><input type='checkbox' name='del__$Fpdf'>Delete";
-
               $btn_val = 'Chose File';
               if( file_exists($Fjpg) or file_exists($Fpng) or file_exists($Fpdf) ) $btn_val = "Change File";
 
