@@ -73,6 +73,8 @@ $formulario = formbasico($fields);
 <?=$formulario?>
 
 <!--
+<script src="//cdn.ckeditor.com/4.7.0/full/ckeditor.js"></script>
+
 <script>
     CKEDITOR.replace( 'textarea_by_id' );
 </script>
