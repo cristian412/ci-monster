@@ -5,7 +5,7 @@ function listaSimple($lista,$js='dataTables',$id_dom=''){
         # id_dom
         next($lista['columna']); //llevamos el puntero del array al siguiente elmento
         $a = key($lista['columna']); //obtenemos el key que necesitamos ej. id_tabla
-        $id_dom = str_replace('id_', '', $lista['columna'][$a]['name'] ); // guardamos el name de la tabla como $id_dom
+        $id_dom = str_replace('id_', '', $lista['columna'][$a]['name'] ); // guardamos el nombre de la tabla como $id_dom
       }
       // recorremos las columnas para guardar los titulos en la variable t
       $t = array();
@@ -64,8 +64,8 @@ function listaSimple($lista,$js='dataTables',$id_dom=''){
           "columns": '.$columns.'
          } );
       $("table > tbody > tr").click(function(){
-      $("table tbody tr").removeClass("warning");
-      $(this).addClass("warning");
+      $("table tbody tr").removeClass("success");
+      $(this).addClass("success");
           });       
         </script>
         ';
@@ -73,8 +73,8 @@ function listaSimple($lista,$js='dataTables',$id_dom=''){
       $r.= '
         <script>
           $("table > tbody > tr").click(function(){
-            $("table tbody tr").removeClass("warning");
-            $(this).addClass("warning");
+            $("table tbody tr").removeClass("success");
+            $(this).addClass("success");
           });       
         </script>';
         
@@ -105,18 +105,18 @@ function pre($v){
 function formbasico($fields,$id_dom=''){
   if(empty($fields))
     return;
-	$action = $fields['tabla']['action'];
+  $action = $fields['tabla']['action'];
   $tabla  = $fields['tabla']['value'];
-	$id_tabla  = $fields['id_'.$tabla]['value'];
+  $id_tabla  = $fields['id_'.$tabla]['value'];
 
   if($id_dom == '') $id_dom = $tabla;
 
   $result = "<div class='row'>
   <form class='form' enctype='multipart/form-data' action='$action' method='post' id='{$id_dom}_form' >";
-	    foreach ($fields as $v):
+      foreach ($fields as $v):
         
-	      #### CREA LAS VARIABLES INDIVIDUALES 
-	      foreach ($v as $key => $var) $$key = $var;
+        #### CREA LAS VARIABLES INDIVIDUALES 
+        foreach ($v as $key => $var) $$key = $var;
 
           // BACKGROUND & PRE POST
           // En el array $style['divbg'=>'','labelbg'=>'','pre'=>'','post'=>''];
@@ -131,38 +131,38 @@ function formbasico($fields,$id_dom=''){
           $cierraDiv = "$post </div>";
 
 
-		  if( $type == 'hidden' ) $abreDiv   = '';
-		  if( $type == 'hidden' ) $cierraDiv   = '';
-	      $result .= $abreDiv;
-	
-        	$value = str_ireplace("'", "`", $value);
+      if( $type == 'hidden' ) $abreDiv   = '';
+      if( $type == 'hidden' ) $cierraDiv   = '';
+        $result .= $abreDiv;
+  
+          $value = str_ireplace("'", "`", $value);
 
-	      # INPUT METHOD XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-	      if($element=='input'):
+        # INPUT METHOD XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        if($element=='input'):
           $addCommas = '';
           if($type=='number' and !stristr($atributes, 'step') ){
             $addCommas = " onkeyup=\"this.value=addCommas(this.value);\" ";
             $type = 'text';
           }
-	        if($type=='hidden')
-				    $result .= "<input type='hidden' name='{$name}' value='$value' >"; 
+          if($type=='hidden')
+            $result .= "<input type='hidden' name='{$name}' value='$value' >"; 
 
-	        if($type!='hidden' and $element!='checkbox' and $type!='submit' and $type!='file'):
-	            $result .=
-	            "<div class='form-group form-group-sm' $labelbg >
-	              <label for='{$id_dom}_{$name}' id='{$id_dom}_label_{$name}'>$label</label>
-	              <input class='form-control inputGris'
+          if($type!='hidden' and $element!='checkbox' and $type!='submit' and $type!='file'):
+              $result .=
+              "<div class='form-group form-group-sm' $labelbg >
+                <label for='{$id_dom}_{$name}' id='{$id_dom}_label_{$name}'>$label</label>
+                <input class='form-control inputGris'
                   $addCommas
-	                id='{$id_dom}_{$name}'
-	                onFocus=\"this.style.backgroundColor='#FFFFBB'\"
-	                type='$type' 
-	                name='$name'
-	                value='$value'
-	                placeholder='$placeholder'
+                  id='{$id_dom}_{$name}'
+                  onFocus=\"this.style.backgroundColor='#FFFFBB'\"
+                  type='$type' 
+                  name='$name'
+                  value='$value'
+                  placeholder='$placeholder'
                   $atributes
                    />
-	            </div>";
-	        endif;
+              </div>";
+          endif;
           if($type == 'file'):
               $img = '<span class="text-info">NO EXISTE IMAGEN </span>';
               $jpg = URL.'content/files/'.$tabla.'/'.$colName.'/'.$id_tabla.'.jpg';
@@ -173,9 +173,10 @@ function formbasico($fields,$id_dom=''){
               $Fpng = FCPATH.'content/files/'.$tabla.'/'.$colName.'/'.$id_tabla.'.png';
               $Fpdf = FCPATH.'content/files/'.$tabla.'/'.$colName.'/'.$id_tabla.'.pdf';
 
-              if( file_exists($Fjpg) ) $img = "<img src='$jpg?datetime=".date('Y-m-d H:i:s')."' class='img-responsive' style='margin-top:5px;'><input type='checkbox' name='del__$Fjpg'>Delete";
-              if( file_exists($Fpng) ) $img = "<img src='$png?datetime=".date('Y-m-d H:i:s')."' class='img-responsive' style='margin-top:5px;'><input type='checkbox' name='del__$Fpng'>Delete";
+              if( file_exists($Fjpg) ) $img = "<img src='$jpg' class='img-responsive' style='margin-top:5px;'><input type='checkbox' name='del__$Fjpg'>Delete";
+              if( file_exists($Fpng) ) $img = "<img src='$png' class='img-responsive' style='margin-top:5px;'><input type='checkbox' name='del__$Fpng'>Delete";
               if( file_exists($Fpdf) ) $img = "<span  class='text-success'>EXISTE UN <a href='$pdf' target='_blank' class='btn btn-info'>PDF</a> </span><input type='checkbox' name='del__$Fpdf'>Delete";
+
               $btn_val = 'Chose File';
               if( file_exists($Fjpg) or file_exists($Fpng) or file_exists($Fpdf) ) $btn_val = "Change File";
 
@@ -214,58 +215,58 @@ function formbasico($fields,$id_dom=''){
 
 
           endif;
-	      endif; 
+        endif; 
 
-	      # TEXT AREA METHOD XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-	      if($element == 'textarea'):
-	        $result .= "
-	          <div class='form-group form-group-sm' $labelbg >
-	            <label for='{$id_dom}_{$name}' id='{$id_dom}_label_{$name}'>$label </label>
-	            <textarea rows='4' cols='100' style='width:100%'
-	              id='{$id_dom}_{$name}'
-	              onFocus=\"this.style.backgroundColor='#FFFFBB'\"
-	              name='$name'
-	                $atributes
-	            >$value</textarea>
-	          </div>";
-	      endif;
+        # TEXT AREA METHOD XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        if($element == 'textarea'):
+          $result .= "
+            <div class='form-group form-group-sm' $labelbg >
+              <label for='{$id_dom}_{$name}' id='{$id_dom}_label_{$name}'>$label </label>
+              <textarea rows='4' cols='100' style='width:100%'
+                id='{$id_dom}_{$name}'
+                onFocus=\"this.style.backgroundColor='#FFFFBB'\"
+                name='$name'
+                  $atributes
+              >$value</textarea>
+            </div>";
+        endif;
 
-	      # CHECKBOX METHOD TRUE O FALSE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-	      if($element == 'checkbox'):
-	        $ckd = '';
-		    if($value == 1) $ckd=' checked ';
-	        $result .= "<div class='form-group form-group-sm' $labelbg>";
-			$result .= "<label for='{$name}'>$label</label>";
+        # CHECKBOX METHOD TRUE O FALSE XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        if($element == 'checkbox'):
+          $ckd = '';
+        if($value == 1) $ckd=' checked ';
+          $result .= "<div class='form-group form-group-sm' $labelbg>";
+      $result .= "<label for='{$name}'>$label</label>";
             $result .= "<input type='checkbox' class='form-control' name='$name' id='{$id_dom}_{$name}' value='1' $ckd/></div>";
-	      endif; 
+        endif; 
 
 
-	      # SELECT METHOD XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-	      if($element == 'select'):
-	        $result .= "
-	          <div class='form-group form-group-sm' $labelbg>
-	            <label for='{$id_dom}_{$name}' id='{$id_dom}_label_{$name}'>$label</label>
-	            <select name='$name' class='form-control' id='{$id_dom}_{$name}' $atributes required
-	            onFocus=\"this.style.backgroundColor='#FFFFBB'\" >
-	              <option value=''>Seleccione</option>";
+        # SELECT METHOD XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        if($element == 'select'):
+          $result .= "
+            <div class='form-group form-group-sm' $labelbg>
+              <label for='{$id_dom}_{$name}' id='{$id_dom}_label_{$name}'>$label</label>
+              <select name='$name' class='form-control' id='{$id_dom}_{$name}' $atributes required
+              onFocus=\"this.style.backgroundColor='#FFFFBB'\" >
+                <option value=''>Seleccione</option>";
 
-	              $vt = str_ireplace('_id', '', $name);
-	              for ($i=0; $i < count($option); $i++): 
-	                $optionId = $option[$i]['id_'.$vt];
-	                $optionTx = $option[$i]['name_'.$vt];
-	                $selected = '';
-	                if( $optionId == $value ) $selected = ' selected ';
-	                $result .= "<option value='$optionId' $selected >$optionTx</option>";
-	              endfor;
-	            $result .= "</select></div>";
-	      endif;
+                $vt = str_ireplace('_id', '', $name);
+                for ($i=0; $i < count($option); $i++): 
+                  $optionId = array_values($option[$i])[0]; // $option[$i]['id_'.$vt];
+                  $optionTx = array_values($option[$i])[1]; //$option[$i]['nombre_'.$vt];
+                  $selected = '';
+                  if( $optionId == $value ) $selected = ' selected ';
+                  $result .= "<option value='$optionId' $selected >$optionTx</option>";
+                endfor;
+              $result .= "</select></div>";
+        endif;
 
-	      $result .= $cierraDiv;
+        $result .= $cierraDiv;
 
-	    endforeach; # END FOREACH
+      endforeach; # END FOREACH
 
-	  $result .= "
-	</form></div>";
+    $result .= "
+  </form></div>";
   $result .= '<script>function addCommas(x){
     //remove commas
     retVal = x ? parseFloat(x.replace(/,/g, "")) : 0;
@@ -275,11 +276,13 @@ function formbasico($fields,$id_dom=''){
 
 }</script>';
 
-	return $result;
+  return $result;
 }
 function update($update){
     $update = str_replace(',', ', ', $update);
     $update = str_replace('"', '', $update);
+    $update = str_replace('`', '', $update);
+    $update = str_replace("'", "", $update);
     $sustituye = array("\r\n", "\n\r", "\n", "\r");
     $update = str_replace($sustituye, "", $update); 
     $update = '
@@ -322,6 +325,10 @@ function modal($data,$title='editar_item'){
   </div>
   ';
   return $html;
+}
+
+function monton($monto){
+  return number_format($monto, 0, '', ',');
 }
 
 function montol($monton){
