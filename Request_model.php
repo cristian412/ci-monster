@@ -523,7 +523,11 @@ class Request_model extends CI_Model {
 			    $valor.="'$value',";
 			  }
 			endforeach;
-			$orden = "INSERT INTO $tabla (".$clave.") values (".$valor.")";
+			// elimina la ultima , del conjunto de clave y valor
+		    $clave = substr ($clave, 0, -1);
+		    $valor = substr ($valor, 0, -1);
+
+		$orden = "INSERT INTO $tabla (".$clave.") values (".$valor.")";
 		endif;
 
 		# UPDATE METHOD ############################3
