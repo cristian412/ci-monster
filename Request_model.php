@@ -27,27 +27,15 @@ class Request_model extends CI_Model {
 
 
 	public function last($tabla){
-
 		$orden = "SELECT * FROM $tabla order by id_$tabla desc limit 1";
 		$q = $this->db->query($orden)->result();
 		$r = json_decode( json_encode( $q ), true );
-
-		if( count($r) == 0 ){
-			$q = $this->db->query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
-				WHERE table_schema = '".DATABASE."' and TABLE_NAME = '$tabla' ")->result();
-			$t = json_decode( json_encode( $q ), true );
-			for ($i=0; $i <count($t) ; $i++) { 
-				$atributo = $t[$i]['COLUMN_NAME'];
-				$re[$atributo] = '';
-			}
-			return $re;
-		}
+		if( count($r) == 0 ) return;
 
 		$result = $r[0];
 
 		return $result;
 	}
-
 
 
 
@@ -154,7 +142,7 @@ class Request_model extends CI_Model {
 			if($colDataType=='decimal') $type = 'number';
 			if($colType=='date') $type = 'date';
 			if($colType=='time') $type = 'time';
-			if($colType=='datetime') $type = 'datetime-local';
+			if($colType=='datetime') $type = 'datetime';
 			if($colType=='timestamp') $type = 'hidden';
 			if($colType=='mediumtext') $element = 'textarea';
 			if($colType=='text' ) $element = 'textarea';
@@ -173,30 +161,9 @@ class Request_model extends CI_Model {
 			$option = '';
 			$ot = str_replace('_id', '', $colName);
 			if($element=='select'){
-				$varcampos = 	"id_$ot,name_$ot";
-				# BUSCAMOS SI TIENE EL CAMPO U_ID
-				$u = $this->session->userdata('u');
-				$usu = $this->session->userdata('usu');
-				//if(empty($u)) return;
-
-				$q = $this->db->query("
-				SELECT 
-					COLUMN_NAME
-				FROM 
-					INFORMATION_SCHEMA.COLUMNS 
-				WHERE 
-					table_schema = '".DATABASE."' and 
-					TABLE_NAME = '$ot' and 
-					COLUMN_NAME = 'u_id' 
-				")->result();
-				$varuid = json_decode( json_encode( $q ), true );
-				$where_u_id = '';
-				if( !empty($varuid) )
-					$where_u_id = "WHERE u_id = $u";
-				$orden = "SELECT $varcampos FROM $ot $where_u_id";
+				$orden = "SELECT * FROM $ot ";
 				$q = $this->db->query($orden)->result();
-				$option = json_decode( json_encode( $q ), true );
-				
+				$option = json_decode( json_encode( $q ), true );	
 			}
 			################### DISPLAY HIDDEN #########################################################
 			$display = '';
@@ -222,14 +189,15 @@ class Request_model extends CI_Model {
 				endforeach;
 			else:
 				$col = 3;
-				if($type   == 'number' )$col = 3;
-				if($type   == 'date' )  $col = 3;
-				if($type   == 'time' )  $col = 3;
+				if($type   == 'number' )$col = 2;
+				if($type   == 'date' )  $col = 2;
+				if($type   == 'time' )  $col = 2;
 				if($element=='checkbox')$col = 1;
 				if($type   == 'hidden' )$col = 0;
 			endif;
-			################### REQUIERED #############################################################
+			################### ATRIBUTES #############################################################
 			$atributes = '';
+			################### REQUIERED #############################################################
 			if(stristr($colComment, 'required')) $atributes.= ' required ';
 			if(stristr($colName, '_id'))  $atributes.= ' required ';
 
@@ -261,7 +229,7 @@ class Request_model extends CI_Model {
 		    'style'=>$style
 		    );
 
-		    if($colType!='timestamp' and $colName!='u_id'  and $colName!='usuario_id' )
+		    if($colType!='timestamp' )
 			    $fields[$colName] = $var; 
 		}
 		################### SE GENERA SUBMIT #############################################################
@@ -323,31 +291,36 @@ class Request_model extends CI_Model {
 
 		for ($i=0; $i <count($t) ; $i++):
 	        $colName = $t[$i]['COLUMN_NAME'];
-	        $colKey = $t[$i]['COLUMN_KEY'];
+	        $colKey  = $t[$i]['COLUMN_KEY'];
 	        $colType = $t[$i]['DATA_TYPE'];
 
 	        if($i>0) $q.=', ';
 
 	        if( stristr($colName,'_id') ){
+
 	        	$a = str_replace('_id', '', $colName);
-	        	$q.= $a.'.name_'.$a. ' as '.$a;
+				$qt = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
+				WHERE  table_schema =  '".DATABASE."' and TABLE_NAME = '".$a."' and ORDINAL_POSITION=2";
+				$r = $this->db->query($qt)->result();
+				$tn = json_decode( json_encode( $r ), true );
+				$name = $tn[0]['COLUMN_NAME'];
+
+	        	$q.= $a.'.'.$name. ' as '.$a;
 	        	$q.= ','. $tabla.'.'.$colName.' as '.$colName;
 	        	$from.=', '.$a;
 	        	$where.=' and '.$a.'.id_'.$a.' = '.$tabla.'.'.$a.'_id';
-	        	if($colName=='u_id'){
-	        		$where.=' and '.$tabla.'.u_id = '.$u;
-	        	}
 	        	$colName = $a;
 	        }else{
 	        	if($colType=='date'){
-					$q.= "DATE_FORMAT($tabla.$colName,'%d/%m/%Y') as $colName";
+					//$q.= "DATE_FORMAT($tabla.$colName,'%d/%m/%Y') as $colName";
+					$q.= $tabla.'.'.$colName.' as '.$colName;
 	        	}else{
 		        	$q.= $tabla.'.'.$colName.' as '.$colName;
 	        	}
 	        }
 
 			$forLabel = str_replace('_id', '', $colName); # reemplaza _id con "nada", osea borra
-			$forLabel = str_replace('_'.$tabla, '', $forLabel); # reemplaza el name de la tabla, osea borra
+			$forLabel = str_replace('_'.$tabla, '', $forLabel); # reemplaza el nombre de la tabla, osea borra
 			$forLabel = str_replace('_', ' ', $forLabel); # reemplaza _ con un espacio
 			$forLabel = ucwords($forLabel); # pone la Primera Letra en Mayuscula
 
@@ -411,7 +384,7 @@ class Request_model extends CI_Model {
 		for ($i=0; $i <count($r); $i++) { 
 			$reg = $r[$i];
 	        $id = $r[$i]['id_'.$tabla];
-		    $abrir  = ['abrir'=> '<a href="'.$path.'/show/'.$id.'"><img src="https://maxcdn.icons8.com/office/PNG/16/Very_Basic/open_folder-16.png" title="Open Folder" width="16" height="16"></a>'];
+		    $abrir  = ['abrir'=> '<a href="'.$path.'/show/'.$id.'" class="btn btn-link btn-xs">📂</a>'];
 		    $editar = ['editar'=> '<a href="'.$path.'/edit/'.$id.'"><img src="https://maxcdn.icons8.com/office/PNG/16/Very_Basic/edit-16.png" title="Edit" width="16" height="16"></a>'];
 
 			$reg = $abrir+$reg;				
@@ -460,11 +433,6 @@ class Request_model extends CI_Model {
 		#4 empezamos a crear el query con el seteo inicial y el recorrido del array $t
 		$q = 'SELECT ';
 		$from = ' FROM '.$tabla.' ';
-
-		# seteamos el unierso
-		//$u = $this->session->userdata('u');
-		//if(empty($u)) return;
-
 		for ($i=0; $i <count($t) ; $i++):
 	        $colName = $t[$i]['COLUMN_NAME'];
 	        $colKey = $t[$i]['COLUMN_KEY'];
@@ -474,7 +442,7 @@ class Request_model extends CI_Model {
 
 	        if( stristr($colName,'_id') ){
 	        	$a = str_replace('_id', '', $colName);
-	        	$q.= $a.'.name_'.$a. ' as '.$a;
+	        	$q.= $a.'.nombre_'.$a. ' as '.$a;
 	        	$q.= ','. $tabla.'.'.$colName.' as '.$colName;
 	        	$from.=', '.$a;
 	        	$where.=' and '.$a.'.id_'.$a.' = '.$tabla.'.'.$a.'_id';
@@ -483,24 +451,20 @@ class Request_model extends CI_Model {
 	        	}
 	        	$colName = $a;
 	        }else{
-	        	if($colType=='date'){
+	        	if($colType=='date')
 					$q.= "DATE_FORMAT($tabla.$colName,'%d/%m/%Y') as $colName";
-	        	}else{
+	        	else
 		        	$q.= $tabla.'.'.$colName.' as '.$colName;
-	        	}
 	        }
 		endfor; // termina el recorrido de t
-
 		# hacemos el query
 		$q = $q.$from.$where;
-		
 		$re = $this->db->query($q)->result();
 		$r = json_decode( json_encode( $re ), true );
 		# si encuentra
 		$return = '';
 		if( count($r)>0 )
 			$return = $r[0];
-		//echo "<br><br><br><br><br><br><br><br><pre>"; print_r($r); echo "</pre>";
 		return $return;
 	}
 
@@ -532,7 +496,6 @@ class Request_model extends CI_Model {
 
 		$v='update';
 		if( $id=='new' ) $v='insert';
-		//echo "<br><br><br><br><br><br><br><br><br>";		pre($_POST);
 
 		####################################################
 		# OBTENEMOS LAS COLUMNAS DE LA TABLA
@@ -548,24 +511,6 @@ class Request_model extends CI_Model {
 				if($key == $r[$i]['COLUMN_NAME'] and $r[$i]['DATA_TYPE'] == 'int' )$valores[$key] = str_replace(',', '', $value);
 		endforeach;
 
-		# SETEAMOS DESDE LA SESION EL U_ID
-		$u = $this->session->userdata('u');
-		$usu = $this->session->userdata('usu');
-		$vencimiento = $this->session->userdata('vencimiento');
-
-		$key_u_id = $val_u_id = $update_u_id = '';
-		if (in_array("u_id", $colName)){
-			if($tabla=='usuario'){
-				$key_u_id = " `u_id` ";
-				$val_u_id = " '$u' ";
-				$update_u_id = " and `u_id` = '$u' ";
-			}else{
-				$key_u_id = " `usuario_id`, `u_id` ";
-				$val_u_id = " '$usu', '$u' ";
-				$update_u_id = " and `u_id` = '$u' and `usuario_id` = '$usu' ";
-
-			}
-		}
 
 		# INSERT METHOD ############################3
 		if( $v=='insert' ):
@@ -578,13 +523,6 @@ class Request_model extends CI_Model {
 			    $valor.="'$value',";
 			  }
 			endforeach;
-			if( $key_u_id!='' ){
-				$clave = $clave.$key_u_id;
-				$valor = $valor.$val_u_id;
-			}else{
-			    $clave = substr ($clave, 0, -1);
-			    $valor = substr ($valor, 0, -1);
-			}
 			$orden = "INSERT INTO $tabla (".$clave.") values (".$valor.")";
 		endif;
 
@@ -597,12 +535,8 @@ class Request_model extends CI_Model {
 			    $orden.=($key=='id_'.$tabla)?" `$key` = '$value'":", `$key` = '$value' ";
 			  }
 			endforeach;
-			$orden.= " WHERE `id_$tabla` = '$id' $update_u_id";
+			$orden.= " WHERE `id_$tabla` = '$id' ";
 		endif;
-
-		#if( $_SESSION['usu'] == 1 )
-			//echo "<br><br><br><br><br><br><br><br><br>".$orden;
-
 
 		# P E T I C I O N  METHOD ############################3
 		  $this->db->query($orden);
@@ -614,14 +548,53 @@ class Request_model extends CI_Model {
 		  }
 
 		# OTRAS ACTUALIZACIONES SIMULTANEAS
-		  
+		if($tabla=='movimiento'):
+			$q = 'SELECT id_movimiento from movimiento limit 1';
+			// PTE
+			if($tipo_movimiento_id== 2)	$q = "UPDATE proyecto set proyecto_estado_id = 1 where id_proyecto={$proyecto_id}";
+			// EBP
+			if($tipo_movimiento_id== 5)	$q = "UPDATE proyecto set proyecto_estado_id = 2 where id_proyecto={$proyecto_id}";
+			// DIA
+			if($tipo_movimiento_id==19)	$q = "UPDATE proyecto set nro_de_licencia= '{$numero}', fecha_de_licencia='{$fecha_registro}', proyecto_estado_id = 4 where id_proyecto={$proyecto_id}";
+			// RES
+			if($tipo_movimiento_id==21) $q = "UPDATE proyecto set nro_de_resolucion= '{$numero}', fecha_resolucion='{$fecha_registro}', proyecto_estado_id = 5 where id_proyecto={$proyecto_id}";
+			// ME
+			if($tipo_movimiento_id== 8) 
+				$q = "UPDATE proyecto set 
+				mesa_entrada= '{$numero}', 
+				fecha_mesa_entrada='{$fecha_registro}', 
+				proyecto_estado_id = 3 
+				where id_proyecto={$proyecto_id}";
+			
+			$this->db->query($q);
+
+		endif;
+
+		if($tabla=='movimiento'):
+			// PTE
+			if($tipo_movimiento_id== 2){
+				$a = 'SELECT * from movimiento where tipo_movimiento_id=2 order by id_movimiento DESC limit 2';
+				$b = $this->db->query($a)->result();
+				$c = json_decode( json_encode( $b ), true );
+
+				$last = intval($c[1]['numero']);
+				$last++;
+
+				$q = "UPDATE movimiento set 
+				numero= '{$last}'
+				where id_movimiento={$id}";
+
+				$this->db->query($q);
+			}
+		endif;
+
 
 		# MOVE UPLOADED FILE ############################3
 		if( isset($_FILES) ){
 			$folder = 'content/';
 			foreach ($_FILES as $key => $value) {
 				if($value['error']==4){
-					$re.='<br>No se pudo alzar el archivo<br>';
+					$re.='<br>NINGUN ARCHIVO SUBIDO<br>';
 				}else{
 					$path   = FCPATH.$folder.'files';
 					if(!is_dir($path)){ 
@@ -645,6 +618,7 @@ class Request_model extends CI_Model {
 					$target_file = $path.'/'.$id.$type;
 					if ( move_uploaded_file($_FILES[$key]["tmp_name"], $target_file) )
 						$re.='<br>UPLOADED FILE: '.$target_file;
+
 					// elimina los demas archivos si existen
 					if( file_exists($path.'/'.$id.'.jpg') and $type!='.jpg' ) unlink($path.'/'.$id.'.jpg');
 					if( file_exists($path.'/'.$id.'.png') and $type!='.png' ) unlink($path.'/'.$id.'.png');
@@ -653,6 +627,9 @@ class Request_model extends CI_Model {
 			} //END FOREACH
 			// /pre($_FILES);
 		}// END MOVE UPLOADED FILE ############################3
+
+
+
 
 		# DELETE FILES
 		foreach ($_POST as $key => $value) {
@@ -663,9 +640,8 @@ class Request_model extends CI_Model {
 				$path = str_replace('_pdf', '.pdf', $path);
 				if( file_exists($path) ) unlink($path);
 			}
-
-		
 		}
+
 		$_POST = array();
 		$re.= $orden;
 
