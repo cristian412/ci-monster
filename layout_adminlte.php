@@ -5,6 +5,18 @@ if(!isset($yield_data)) $yield_data = '<h1>Yield Data is Empty</h1>';
 if(!isset($yield_navbar)) $yield_navbar = '<li><a href="#" data-toggle="control-sidebar"><span>YIELD_NAVBAR</span></a></li>';
 if(!isset($yield_sidevar)) $yield_sidebar = '<li> <a href="#"><i class="fa fa-th"></i> <span>YIELD_SIDEBAR</span></a>';
 
+// LISTA DE TABLAS
+$li_tablas = '';
+$tablas = $this->session->userdata('tables');
+foreach ($tablas as $value) {
+  $li_tablas.='
+  <div  style="float:left; margin:2px;">
+    <a href="'.URL.'tables/'.$value.'" class="btn btn-primary btn-xs">'
+    .ucwords($value).
+    '</a>
+  </div> ';
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -14,7 +26,9 @@ if(!isset($yield_sidevar)) $yield_sidebar = '<li> <a href="#"><i class="fa fa-th
   <title><?=APPNAME?></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="<?=URL?>apple-touch-icon.png">
   <link rel="icon" href="<?=URL?>favicon.ico" type="image/x-icon" />
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css">
@@ -79,6 +93,18 @@ if(!isset($yield_sidevar)) $yield_sidebar = '<li> <a href="#"><i class="fa fa-th
       </ul>
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
+          <!-- BOTON IMPRIMIR Y LISTA DE TABLAS -->
+          <li><a href="#" onclick="window.print();"> <span  style="color:LightGreen "><i class="fa fa-print"></i> Imprimir</span></a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> 
+            <i class="fa fa-th-list"></i> Tablas <span class="caret"></span></a>
+            <div class="dropdown-menu" role="menu">
+              <div style="padding:5px;width: 600px; background-color: orange">
+                <p><a href="<?=URL?>mysql/tables"><button class="btn btn-danger btn-sm">MySql</button></a></p>
+                <?=$li_tablas?>
+              </div>
+            </div>
+          </li>
           <li><a href="<?=URL?>users/sign_out" ><i class="fa fa-sign-out"></i> Sing Out</a></li>
         </ul>
       </div>
