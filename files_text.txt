@@ -61,7 +61,7 @@ class XXX extends CI_Controller {
 
 ?>
 
-<h1>Edit <?=$tabla?></h1>
+<h1>Edit <?=ucwords($tabla)?></h1>
 <?=$formulario?>
 
 <!--
@@ -77,7 +77,7 @@ class XXX extends CI_Controller {
 ?>
 <?=$update?>
 <h1>
-	Lista <?=$tabla?>
+	List <?=ucwords($tabla)?>
 	<a href='#' class='btn btn-success' data-toggle='modal' data-target='#modal_editar'>Agregar con Modal</a>
 	<a href="<?=URL.'tables/'.$tabla.'/edit/new'?>" class='btn btn-success'>Agregar</a>
 </h1>
