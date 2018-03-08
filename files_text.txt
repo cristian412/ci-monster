@@ -18,8 +18,7 @@ class XXX extends CI_Controller {
 			$data['li'] = listasimple($data['lista']);
 
 		# SETEAR EL FORMULARIO
-		$action = URL.'tables/'.$action;
-		$fields = $this -> Request_model -> form($tabla,'new',$action);
+		$fields = $this -> Request_model -> form($tabla,'new');
 		//$fields['nro']['col'] = '1';
 		$formulario = formbasico($fields);
 		$data['modal'] = modal($formulario,'modal_editar');
@@ -57,8 +56,7 @@ class XXX extends CI_Controller {
 	}
 }
 
-&&&
-<?php
+&&&<?php
 ###### EDIT ######
 
 ?>
@@ -74,8 +72,7 @@ class XXX extends CI_Controller {
 </script>
 -->
 
-&&&
-<?php
+&&&<?php
 ###### LIST ######
 ?>
 <?=$update?>
@@ -85,13 +82,11 @@ class XXX extends CI_Controller {
 	<a href="<?=URL.'tables/'.$tabla.'/edit/new'?>" class='btn btn-success'>Agregar</a>
 </h1>
 
-
 <?=$li?>
 
 <?=$modal?>
 
-&&&
-<?php
+&&&<?php
 ###### SHOW ######
 
 foreach ($lista as $key => $value) $$key = $value;
@@ -103,6 +98,5 @@ foreach ($lista as $key => $value) $$key = $value;
 </h1>
 
 <?=pre($lista)?>
-
 
 <?=$modal?>
