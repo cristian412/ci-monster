@@ -10,12 +10,12 @@ class XXX extends CI_Controller {
 		$data['tabla'] = $tabla = $this->tabla;
 
 		# SETEAMOS LA LISTA
-		$data['lista']  = $this -> Request_model -> grid($tabla);
+		$lista  = $this -> Request_model -> grid($tabla);
 		//unset($lista['columna']['id_juicio']);
 		if( count($data['lista']['contenido'])<10  )
-			$data['li'] = listasimple($data['lista'],'',''); 
+			$data['li'] = listasimple($lista,'',''); 
 		else
-			$data['li'] = listasimple($data['lista']);
+			$data['li'] = listasimple($lista);
 
 		# SETEAR EL FORMULARIO
 		$fields = $this -> Request_model -> form($tabla,'new');
