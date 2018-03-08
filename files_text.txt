@@ -12,7 +12,7 @@ class XXX extends CI_Controller {
 		# SETEAMOS LA LISTA
 		$lista  = $this -> Request_model -> grid($tabla);
 		//unset($lista['columna']['id_juicio']);
-		if( count($data['lista']['contenido'])<10  )
+		if( count($lista['contenido'])<10  )
 			$data['li'] = listasimple($lista,'',''); 
 		else
 			$data['li'] = listasimple($lista);
