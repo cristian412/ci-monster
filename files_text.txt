@@ -2,58 +2,55 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class XXX extends CI_Controller {
-	private $tabla = 'xxx';
-	public function index(){
-		$action = $tabla = $this->tabla;
-		if( $this->uri->segment(1) == 'tables' )	$action = URL.'tables/'.$action;
-		$data['update'] = $this -> Request_model -> update();
-		$data['fields'] = $this -> Request_model -> form($tabla,'new',$action);
-		$data['lista']  = $this -> Request_model -> grid($tabla);
 
-		$tabla = $data['lista']['meta']['tabla'];
-		$data['add_url'] = $data['fields']['tabla']['action'].'/edit/new';
+	private $tabla = 'xxx';
+
+	public function index(){
+		$data['update'] = $this -> Request_model -> update();
+		$data['tabla'] = $tabla = $this->tabla;
+
 		# SETEAMOS LA LISTA
+		$data['lista']  = $this -> Request_model -> grid($tabla);
 		//unset($lista['columna']['id_juicio']);
 		if( count($data['lista']['contenido'])<10  )
 			$data['li'] = listasimple($data['lista'],'',''); 
 		else
 			$data['li'] = listasimple($data['lista']);
+
 		# SETEAR EL FORMULARIO
+		$action = URL.'tables/'.$action;
+		$fields = $this -> Request_model -> form($tabla,'new',$action);
 		//$fields['nro']['col'] = '1';
-		$formulario = formbasico($data['fields']);
+		$formulario = formbasico($fields);
 		$data['modal'] = modal($formulario,'modal_editar');
 
 		$data['yield_data'] = $this->load->view('tables/'.$tabla.'/list',$data,true);
 	    $this->load->view(LAYOUT.'index',$data);	
 	}
 	public function show(){
-		$tabla = $this->tabla;
-		$id = $this->uri->segment(3);
-		if( $this->uri->segment(1) == 'tables' ) $id = $this->uri->segment(4);
 		$data['update'] = $this -> Request_model -> update();
-		$data['tabla'] = $tabla;
-		$data['fields'] = $this -> Request_model -> form($tabla,$id);
+		$data['tabla'] = $tabla = $this->tabla;
+		$id = $this->uri->segment(4);
 		$data['lista']  = $this -> Request_model -> item($tabla,$id);
 
 		# SETEAR EL FORMULARIO
+		$fields = $this -> Request_model -> form($tabla,$id);
 		//$fields['nro']['col'] = '1';
-		$formulario = formbasico($data['fields']);
+		$formulario = formbasico($fields);
 		$data['modal'] = modal($formulario,'editar-item');
 
 		$data['yield_data'] = $this->load->view('tables/'.$tabla.'/show',$data,true);
 		$this->load->view(LAYOUT.'index',$data);
 	}
 	public function edit(){
-		$tabla = $this->tabla;
-		$id = $this->uri->segment(3);
-		if( $this->uri->segment(1) == 'tables' ) $id = $this->uri->segment(4);
-		if(empty($id)) $id = 'new';
-		$data['fields'] = $this -> Request_model -> form($tabla,$id);
+		$data['tabla'] = $tabla = $this->tabla;
+		$id = $this->uri->segment(4);
+		if (empty($id)) $id = 'new';
+		
+		$fields = $this -> Request_model -> form($tabla,$id);
 		# SETEAR EL FORMULARIO
-
-		//$data['fields']['nro']['col'] = '1';
-
-		$data['formulario'] = formbasico($data['fields']);
+		//$fields['nro']['col'] = '1';
+		$data['formulario'] = formbasico($fields);
 
 		$data['yield_data'] = $this->load->view('tables/'.$tabla.'/edit',$data,true);
 		$this->load->view(LAYOUT.'index',$data);
@@ -62,14 +59,11 @@ class XXX extends CI_Controller {
 
 &&&
 <?php
-# SETEAR EL FORMULARIO
+###### EDIT ######
 
-//$fields['nro']['col'] = '1';
-
-$formulario = formbasico($fields);
 ?>
 
-<h1>Edit <?=$fields['tabla']['value']?></h1>
+<h1>Edit <?=$tabla?></h1>
 <?=$formulario?>
 
 <!--
@@ -82,17 +76,15 @@ $formulario = formbasico($fields);
 
 &&&
 <?php
-
-
+###### LIST ######
 ?>
 <?=$update?>
 <h1>
-	Lista <?=ucwords($lista['meta']['tabla'])?>
+	Lista <?=$tabla?>
 	<a href='#' class='btn btn-success' data-toggle='modal' data-target='#modal_editar'>Agregar con Modal</a>
-	<a href='<?=$add_url?>' class='btn btn-success'>Agregar</a>
+	<a href="<?=URL.'tables/'.$tabla.'/edit/new'?>" class='btn btn-success'>Agregar</a>
 </h1>
-<?//=pre($lista)?>
-<?//=pre($fields)?>
+
 
 <?=$li?>
 
@@ -100,12 +92,10 @@ $formulario = formbasico($fields);
 
 &&&
 <?php
+###### SHOW ######
+
 foreach ($lista as $key => $value) $$key = $value;
 
-# SETEAR EL FORMULARIO
-//$fields['nro']['col'] = '1';
-$formulario = formbasico($fields);
-$modal = modal($formulario,'editar-item');
 ?>
 <?=$update?>
 <h1>Show <?=ucwords( $tabla ) ?> 
