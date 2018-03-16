@@ -441,15 +441,17 @@ class Request_model extends CI_Model {
 	        if($i>0) $q.=', ';
 
 	        if( stristr($colName,'_id') ){
-	        	$a = str_replace('_id', '', $colName);
-	        	$q.= $a.'.nombre_'.$a. ' as '.$a;
-	        	$q.= ','. $tabla.'.'.$colName.' as '.$colName;
-	        	$from.=', '.$a;
-	        	$where.=' and '.$a.'.id_'.$a.' = '.$tabla.'.'.$a.'_id';
-	        	if($colName=='u_id'){
-	        		$where.=' and '.$tabla.'.u_id = '.$u;
-	        	}
-	        	$colName = $a;
+			$tf = $tabla_foranea = str_replace('_id', '', $colName);
+			$query_tabla = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
+			WHERE  table_schema =  '".DATABASE."' and TABLE_NAME = '".$tf."' and ORDINAL_POSITION=2";
+			$r = $this->db->query($query_tabla)->result();
+			$tn = json_decode( json_encode( $r ), true );
+			$name = $tn[0]['COLUMN_NAME'];
+			$q.= $tf.'.'.$name. ' as '.$tf;
+			$q.= ','. $tabla.'.'.$colName.' as '.$colName;
+			$from.=', '.$tf;
+			$where.=' and '.$tf.'.id_'.$tf.' = '.$tabla.'.'.$tf.'_id';
+			$colName = $tf;
 	        }else{
 	        	if($colType=='date')
 					$q.= "DATE_FORMAT($tabla.$colName,'%d/%m/%Y') as $colName";
