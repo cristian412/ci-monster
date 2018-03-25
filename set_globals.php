@@ -113,7 +113,25 @@ if(!empty($_POST)){
 		$path   = FCPATH.'.htaccess';
 		if( ! write_file($path, $data) ) $re.='ERROR WRITING htaccess'.$path.'<br>';
 		chmod($path, 0777);
+	
+		// CONFIG GOOGLE PLUS
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/config_googleplus.php");
+		$path   = FCPATH.'application/config/googleplus.php';
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING '.$path.'<br>';
+		chmod($path, 0777);
+	
+		// LIBRARIES GOOGLE PLUS
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/library_googleplus.php");
+		$path   = FCPATH.'application/libraries/Googleplus.php';
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING '.$path.'<br>';
+		chmod($path, 0777);
 
+		// THIRD_PARTY GOOGLE PLUS
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/google-login-api.zip");
+		$path   = FCPATH.'application/third_party/google-login-api.zip';
+		if( ! write_file($path, $data) ) $re.='ERROR WRITING '.$path.'<br>';
+		chmod($path, 0777);
+	
 		// HOME CONTROLLER
 		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/controllers_users.php");
 		$path   = FCPATH.'application/controllers/Users.php';
