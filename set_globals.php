@@ -184,7 +184,7 @@ if(!empty($_POST)){
 			password VARCHAR(255),
 			email VARCHAR(255)) ENGINE = InnoDB") ;
 
-		$q = "INSERT INTO users(`id_users`,`username`,`password`)
+		$q = "INSERT INTO users(`id_users`,`username`,`password`,`email`)
 			VALUES('1','admin','admin','cristianamarillacloss@gmail.com'";
         $r = $this-> Request_model -> peticion($q);
 
