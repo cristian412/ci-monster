@@ -181,11 +181,11 @@ if(!empty($_POST)){
 			CREATE TABLE IF NOT EXISTS users 
 			( id_users INT(10) PRIMARY KEY AUTO_INCREMENT, 
 			username VARCHAR(255), 
-			password VARCHAR(255) ) ENGINE = InnoDB") ;
+			password VARCHAR(255),
+			email VARCHAR(255)) ENGINE = InnoDB") ;
 
-		$q = "INSERT INTO users(`id_users`,`username`,`password`) 
-				SELECT '1','admin','admin'  
-				WHERE NOT EXISTS ( SELECT * FROM users ) ";
+		$q = "INSERT INTO users(`id_users`,`username`,`password`)
+			VALUES('1','admin','admin','cristianamarillacloss@gmail.com'";
         $r = $this-> Request_model -> peticion($q);
 
 		if($r!=false){
