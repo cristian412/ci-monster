@@ -1,4 +1,4 @@
-
+<?
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $config['googleplus']['application_name'] = 'cga-inside';
