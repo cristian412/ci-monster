@@ -3,7 +3,15 @@
 
 
 class Googleplus {
-	
+	public function loginURL() { return true;   }
+	public function getAuthenticate() { return true;   }
+	public function getAccessToken(){ return true;   }
+	public function setAccessToken() { return true;   }
+	public function revokeToken() { return true;   }
+	public function getUserInfo() { return true;   }
+
+/*
+
 	public function __construct() {
 		
 		$CI =& get_instance();
@@ -49,5 +57,6 @@ class Googleplus {
         return $this->oauth2->userinfo->get();
     }
 	
+	*/
+
 }
-?>
