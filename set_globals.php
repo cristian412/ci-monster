@@ -121,7 +121,7 @@ if(!empty($_POST)){
 		chmod($path, 0777);
 	
 		// LIBRARIES GOOGLE PLUS
-		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/library_googleplus.php");
+		$data = file_get_contents("https://raw.githubusercontent.com/cristian412/ci-monster/master/library_googleplus");
 		$path   = FCPATH.'application/libraries/Googleplus.php';
 		if( ! write_file($path, $data) ) $re.='ERROR WRITING '.$path.'<br>';
 		chmod($path, 0777);
