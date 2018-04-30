@@ -260,7 +260,36 @@ function formbasico($fields,$id_dom=''){
                 endfor;
               $result .= "</select></div>";
         endif;
+    
+        # DATALIST METHOD XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        if($element == 'datalist'):
+          $result .= "
+            <div class='form-group form-group-sm' $labelbg>
+                <label for='{$id_dom}_{$name}' id='{$id_dom}_label_{$name}'>$label</label>
+                <input class='form-control inputGris'
+                  id='{$id_dom}_{$name}'
+                  onFocus=\"this.style.backgroundColor='#FFFFBB'\"
+                  type='text' 
+                  name='$name'
+                  value='$value'
+                  placeholder='$placeholder'
+                  list='{$name}_list'
+                  $atributes
+                   />
+                <datalist id='{$name}_list'>
+                <option value=''>Seleccione</option>";
 
+                $vt = str_ireplace('_id', '', $name);
+                for ($i=0; $i < count($option); $i++): 
+                  $optionId = array_values($option[$i])[0]; // $option[$i]['id_'.$vt];
+                  $optionTx = array_values($option[$i])[1]; //$option[$i]['nombre_'.$vt];
+                  $selected = '';
+                  if( $optionId == $value ) $selected = ' selected ';
+                  $result .= "<option value='{$optionId}' {$selected} >{$optionTx}</option>";
+                endfor;
+              $result .= "</datalist></div>";
+        endif;
+    
         $result .= $cierraDiv;
 
       endforeach; # END FOREACH
