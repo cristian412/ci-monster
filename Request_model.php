@@ -51,7 +51,7 @@ class Request_model extends CI_Model {
 	#
 	#
 
-	public function form($tabla,$id, $action = ""){
+	public function form($tabla,$id="new", $action = ""){
 
 		/*
 		$tabla = string 
