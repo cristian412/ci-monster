@@ -51,13 +51,14 @@ class Request_model extends CI_Model {
 	#
 	#
 
-	public function form($tabla,$id="new", $action = ""){
+	public function form($tabla,$id = "new", $action = ""){
 
 		/*
 		$tabla = string 
 		$id = interger
 		$action = string
 		*/
+
 		################### CANCELAMOS SI NO ES U=1   #############################################################
 		# tablas que el usuario puede agregar o editar:
 		//$u = $this->session->userdata('u');
@@ -72,11 +73,12 @@ class Request_model extends CI_Model {
 		*/
 
 		################### SE SANEA LAS VARIABLES    #############################################################
-		$q = $this->db->query("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE table_schema = '".DATABASE."' ")->result();
-		$r = json_decode( json_encode( $q ), true );
-		for ($i=0; $i <count($r) ; $i++) $tables[] = $r[$i]['TABLE_NAME'];
+		$result = $this->db->query("Show tables")->result();
+		$valor  = 'Tables_in_'.DATABASE; 
+		foreach ($result as $v) $tables[] = $v->{$valor};
 		if( !in_array($tabla, $tables) ) return;
-		if( !is_numeric($id) ) if( $id!='new') return;
+		if( is_null($id) ) $id ='new';
+		if( !is_numeric($id) and $id!='new') return;
 
 		
 
@@ -139,11 +141,13 @@ class Request_model extends CI_Model {
 			if(stristr($colName, 'id_')) $type = 'hidden';
 			if(stristr($colName, 'file_') or $colName=='file') $type = 'file';
 			if(stristr($colComment, 'checkbock')) $element = 'checkbox';
+			if(stristr($colComment, 'datalist')) $element = 'datalist';
 			if($colDataType=='decimal') $type = 'number';
 			if($colType=='date') $type = 'date';
 			if($colType=='time') $type = 'time';
 			if($colType=='datetime') $type = 'datetime';
 			if($colType=='timestamp') $type = 'hidden';
+			if($colType=='longtext') $element = 'textarea';
 			if($colType=='mediumtext') $element = 'textarea';
 			if($colType=='text' ) $element = 'textarea';
 
@@ -160,7 +164,7 @@ class Request_model extends CI_Model {
 			################### OPTION ################################################################
 			$option = '';
 			$ot = str_replace('_id', '', $colName);
-			if($element=='select'){
+			if($element=='select' or $element=='datalist'){
 				$orden = "SELECT * FROM $ot ";
 				$q = $this->db->query($orden)->result();
 				$option = json_decode( json_encode( $q ), true );	
@@ -211,7 +215,11 @@ class Request_model extends CI_Model {
 				if( $colNumericScale == 4 ) $atributes.= '  step=0.0001 ';
 				if( $colNumericScale == 5 ) $atributes.= '  step=0.00001 ';
 			}
-
+			################### USERS #############################################################
+			if($colName=='users_id'){
+				$display = 'hidden';
+				$value = $_SESSION['id_users'];
+			} 
 
 			################### SE GENERA EL ARRAY CON LOS DATOS ######################################
 		    $var = array(
@@ -279,22 +287,22 @@ class Request_model extends CI_Model {
 
 
 		#3 ########### LISTAR COLU MNAS DE LA TABLA #################################################
-		$q = "SELECT COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT,COLUMN_DEFAULT,COLUMN_KEY
+		$q = "SELECT COLUMN_NAME,DATA_TYPE,COLUMN_KEY
 		FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = '".DATABASE."' and TABLE_NAME = '$tabla'";
-		$r = $this->db->query($q)->result();
-		$t = json_decode( json_encode( $r ), true );
+		$t = $this->db->query($q)->result();
 		#############################################################################################
 
 		#4 empezamos a crear el query con el seteo inicial y el recorrido del array $t
 		$q = 'SELECT ';
 		$from = ' FROM '.$tabla.' ';
 
-		for ($i=0; $i <count($t) ; $i++):
-	        $colName = $t[$i]['COLUMN_NAME'];
-	        $colKey  = $t[$i]['COLUMN_KEY'];
-	        $colType = $t[$i]['DATA_TYPE'];
+		foreach ($t as $key => $value):
 
-	        if($i>0) $q.=', ';
+	        $colName = $value->COLUMN_NAME;
+	        $colType = $value->DATA_TYPE;
+	        $colKey  = $value->COLUMN_KEY;
+
+	        if($key>0) $q.=', ';
 
 	        if( stristr($colName,'_id') ){
 
@@ -312,21 +320,21 @@ class Request_model extends CI_Model {
 	        	$colName = $a;
 	        }else{
 	        	if($colType=='date'){
-					//$q.= "DATE_FORMAT($tabla.$colName,'%d/%m/%Y') as $colName";
-					$q.= $tabla.'.'.$colName.' as '.$colName;
+					$q.= "DATE_FORMAT($tabla.$colName,'%d/%m/%Y') as $colName";
+					//$q.= $tabla.'.'.$colName.' as '.$colName;
 	        	}else{
 		        	$q.= $tabla.'.'.$colName.' as '.$colName;
 	        	}
 	        }
 
 			$forLabel = str_replace('_id', '', $colName); # reemplaza _id con "nada", osea borra
-			$forLabel = str_replace('_'.$tabla, '', $forLabel); # reemplaza el nombre de la tabla, osea borra
+			$forLabel = str_replace('_'.$tabla, '', $forLabel); # reemplaza el nom bre de la tabla, osea borra
 			$forLabel = str_replace('_', ' ', $forLabel); # reemplaza _ con un espacio
 			$forLabel = ucwords($forLabel); # pone la Primera Letra en Mayuscula
 
 		    $count_t = count($t);
 		    $count_t--;
-			if( $i == 0 ){
+			if( $key == 0 ){
 				$col['abrir'] = ["label"=>'📂',"name"=>'abrir',"width"=>'20'];
 				$title['abrir'] = '📂';
 			}
@@ -347,7 +355,7 @@ class Request_model extends CI_Model {
 
 			$col[$colName] = $arr;			
 
-			if( $i == $count_t ){
+			if( $key == $count_t ){
 				$col['editar'] = ["label"=>'✎',"name"=>'editar',"width"=>'20'];
 				$title['editar'] = '✎';
 			}
@@ -360,10 +368,11 @@ class Request_model extends CI_Model {
         {name:'note',index:'note', width:150, sortable:false}
 		*/
 		
-		endfor; // termina el recorrido de t
+		endforeach; // termina el recorrido de t
 
 		#5 hacemos el query
 		$q = $q.$from.$where.$orderBy;
+		
 		$re = $this->db->query($q)->result();
 		$r = json_decode( json_encode( $re ), true );
 
@@ -385,7 +394,7 @@ class Request_model extends CI_Model {
 			$reg = $r[$i];
 	        $id = $r[$i]['id_'.$tabla];
 		    $abrir  = ['abrir'=> '<a href="'.$path.'/show/'.$id.'" class="btn btn-link btn-xs">📂</a>'];
-		    $editar = ['editar'=> '<a href="'.$path.'/edit/'.$id.'"><img src="https://maxcdn.icons8.com/office/PNG/16/Very_Basic/edit-16.png" title="Edit" width="16" height="16"></a>'];
+		    $editar = ['editar'=> '<a href="'.$path.'/edit/'.$id.'">✎</a>'];
 
 			$reg = $abrir+$reg;				
 			$reg = $reg+$editar;
@@ -441,17 +450,17 @@ class Request_model extends CI_Model {
 	        if($i>0) $q.=', ';
 
 	        if( stristr($colName,'_id') ){
-			$tf = $tabla_foranea = str_replace('_id', '', $colName);
-			$query_tabla = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
-			WHERE  table_schema =  '".DATABASE."' and TABLE_NAME = '".$tf."' and ORDINAL_POSITION=2";
-			$r = $this->db->query($query_tabla)->result();
-			$tn = json_decode( json_encode( $r ), true );
-			$name = $tn[0]['COLUMN_NAME'];
-			$q.= $tf.'.'.$name. ' as '.$tf;
-			$q.= ','. $tabla.'.'.$colName.' as '.$colName;
-			$from.=', '.$tf;
-			$where.=' and '.$tf.'.id_'.$tf.' = '.$tabla.'.'.$tf.'_id';
-			$colName = $tf;
+				$tf = $tabla_foranea = str_replace('_id', '', $colName);
+				$query_tabla = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS 
+				WHERE  table_schema =  '".DATABASE."' and TABLE_NAME = '".$tf."' and ORDINAL_POSITION=2";
+				$r = $this->db->query($query_tabla)->result();
+				$tn = json_decode( json_encode( $r ), true );
+				$name = $tn[0]['COLUMN_NAME'];
+				$q.= $tf.'.'.$name. ' as '.$tf;
+				$q.= ','. $tabla.'.'.$colName.' as '.$colName;
+				$from.=', '.$tf;
+				$where.=' and '.$tf.'.id_'.$tf.' = '.$tabla.'.'.$tf.'_id';
+				$colName = $tf;
 	        }else{
 	        	if($colType=='date')
 					$q.= "DATE_FORMAT($tabla.$colName,'%d/%m/%Y') as $colName";
@@ -510,7 +519,8 @@ class Request_model extends CI_Model {
 		foreach ($valores as $key => $value):
 			$$key = $value;
 			for ($i=0; $i < count($r); $i++)
-				if($key == $r[$i]['COLUMN_NAME'] and $r[$i]['DATA_TYPE'] == 'int' )$valores[$key] = str_replace(',', '', $value);
+				if($key == $r[$i]['COLUMN_NAME'] and $r[$i]['DATA_TYPE'] == 'int' )
+					$valores[$key] = str_replace([',','.'], ['',''], $value);
 		endforeach;
 
 
@@ -520,6 +530,8 @@ class Request_model extends CI_Model {
 			foreach ($valores as $key => $value):
 			  $$key = $value;
 			  if( in_array($key, $colName) ){
+			  	if($key=='users_id') $value = $_SESSION['id_users'];
+
 			    $clave.="`".$key."`,";
 			  	$value = str_ireplace("'", "\'", $value);
 			    $valor.="'$value',";
@@ -528,8 +540,8 @@ class Request_model extends CI_Model {
 			// elimina la ultima , del conjunto de clave y valor
 		    $clave = substr ($clave, 0, -1);
 		    $valor = substr ($valor, 0, -1);
-
-		$orden = "INSERT INTO $tabla (".$clave.") values (".$valor.")";
+		    
+			$orden = "INSERT INTO $tabla (".$clave.") values (".$valor.")";
 		endif;
 
 		# UPDATE METHOD ############################3
@@ -537,6 +549,9 @@ class Request_model extends CI_Model {
 			$orden = "UPDATE `$tabla` set ";
 			foreach ($valores as $key => $value):
 			  if( in_array($key, $colName) ){
+			  	// users_id = $_SESSION['id_users']
+			  	if($key=='users_id') $value = $_SESSION['id_users'];
+
 			  	$value = str_ireplace("'", "\'", $value);
 			    $orden.=($key=='id_'.$tabla)?" `$key` = '$value'":", `$key` = '$value' ";
 			  }
@@ -553,7 +568,27 @@ class Request_model extends CI_Model {
 			$id = $a[0]['id'];
 		  }
 
-		# OTRAS ACTUALIZACIONES SIMULTANEAS
+
+
+
+
+
+
+		#########################################################################################################
+		############### OTRAS ACTUALIZACIONES SIMULTANEAS #######################################################
+		#########################################################################################################
+
+
+		if($tabla=='proyecto'):
+			// ESTADO DE PROYECTOS
+			$query_ite = "SELECT proyecto_estado.name_proyecto_estado as estado, count(*) as cantidad from proyecto, proyecto_estado
+			where proyecto_estado.id_proyecto_estado = proyecto.proyecto_estado_id AND proyecto.ver_id=1
+			Group By proyecto.proyecto_estado_id";
+			$estado = $this -> Request_model -> peticion($query_ite); 
+			$this->session->set_userdata('estado', $estado);
+
+		endif;
+
 		if($tabla=='movimiento'):
 			$q = 'SELECT id_movimiento from movimiento limit 1';
 			// PTE
@@ -571,6 +606,17 @@ class Request_model extends CI_Model {
 				fecha_mesa_entrada='{$fecha_registro}', 
 				proyecto_estado_id = 3 
 				where id_proyecto={$proyecto_id}";
+			$tm = $tipo_movimiento_id;
+				
+			if($tm == 2 or $tm == 5 or $tm == 19 or $tm == 21 or $tm == 8 ){
+				// ESTADO DE PROYECTOS
+				$query_ite = "SELECT proyecto_estado.name_proyecto_estado as estado, count(*) as cantidad from proyecto, proyecto_estado
+				where proyecto_estado.id_proyecto_estado = proyecto.proyecto_estado_id AND proyecto.ver_id=1
+				Group By proyecto.proyecto_estado_id";
+				$estado = $this -> Request_model -> peticion($query_ite); 
+				$this->session->set_userdata('estado', $estado);
+
+			}
 			
 			$this->db->query($q);
 
@@ -592,6 +638,43 @@ class Request_model extends CI_Model {
 
 				$this->db->query($q);
 			}
+		endif;
+
+		if($tabla=='pte' and $id_original == 'new'):
+			/*
+			movimiento
+			id_movimiento
+			nombre_movimiento
+			tecnico_cga_id
+			proyecto_id
+			tipo_estudio_id
+			tipo_movimiento_id
+			detalle
+			numero
+			fecha_registro
+			timestamp
+			users_id
+			alerta
+			file_archivo
+			ver_id
+			*/
+			$query = "INSERT INTO movimiento (
+			'tecnico_cga_id',
+			'proyecto_id',
+			'tipo_estudio_id',
+			'tipo_movimiento_id',
+			'detalle',
+			'users_id',
+			) values (
+			{$tecnico_cga_id},
+			{$proyecto_id},
+			{$tipo_estudio_id},
+			'2',
+			'Generado desde PTE',
+			{$_SESSION['id_users']}
+			)";
+			$this->db->query($q);
+
 		endif;
 
 
