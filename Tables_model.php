@@ -37,11 +37,14 @@ class Tables_model extends CI_Model {
             $tablas[] = str_replace('_id', '', $v);
             $crear.= ','.$v.' INTEGER(10)';     
           }  
-          if( stristr($v, '_fecha' ) )     $crear.= ','.$v.' DATE';   
-          if( stristr($v, '_nro' ) )       $crear.= ','.$v.' INTEGER(10)';  
-          if( stristr($v, '_texto' ) )     $crear.= ','.$v.' TEXT'; 
-          if($inic==$crear)                $crear.= ','.$v.' VARCHAR(255)'; 
 
+          if( stristr($v, 'fecha' )or stristr($v, 'fecha') )     $crear.= ','.$v.' DATE  NOT NULL ';   
+          if( stristr($v, '_nro' ) or stristr($v, 'nro_' ) )     $crear.= ','.$v.' INTEGER(10)  NOT NULL ';  
+          if( stristr($v, 'text' ) or stristr($v, 'texto' ) )    $crear.= ','.$v.' TEXT  NOT NULL COMMENT \'col:12\' '; 
+          if( stristr($v, 'timestamp' ) )  $crear.= ','.$v.' TIMESTAMP  DEFAULT CURRENT_TIMESTAMP '; 
+          if($inic==$crear)                $crear.= ','.$v.' VARCHAR(255)  NOT NULL '; 
+        
+        
         endforeach;
 
         $fk = '';
@@ -50,8 +53,8 @@ class Tables_model extends CI_Model {
           $fk.=', FOREIGN KEY('.$value.'_id) REFERENCES '.$value.'(id_'.$value.') '; 
           $creartablas.= 'CREATE TABLE  IF NOT EXISTS '.$value.' ( ';
           $creartablas.= '  id_'.$value.' INTEGER(10) PRIMARY KEY AUTO_INCREMENT ';
-          $creartablas.= ',  name_'.$value.' VARCHAR(99) ';
-          $creartablas.= ',  detail_'.$value.' VARCHAR(99) ';
+          $creartablas.= ',  name_'.$value.' VARCHAR(99)  NOT NULL';
+          $creartablas.= ',  detail_'.$value.' VARCHAR(99) NOT NULL ';
           $creartablas.= ') ENGINE = InnoDB; ';
         endforeach;
         $crear .= $fk.') ENGINE = InnoDB;';
