@@ -495,13 +495,24 @@ class Request_model extends CI_Model {
 	#
 
 
-	public function update(){
-		if( empty($_POST) ) return;
-		if( !isset( $_POST['tabla'] ) ) return;
+	public function update($tabla='',$valores=''){
 
-		$valores = $_POST;
-		$tabla = $valores['tabla'];
-		$id    = $valores['id_'.$tabla];
+
+		if( empty($_POST) ){
+
+			if( empty($tabla) ) return;
+			
+			if( !isset($valores['id']) )
+				$id = 'new';			
+
+		}else{
+			if( !isset( $_POST['tabla'] ) ) return;
+			$valores = $_POST;
+			$tabla = $valores['tabla'];
+			$id    = $valores['id_'.$tabla];
+		}
+
+
 		
 		$re = $orden = '';
 
