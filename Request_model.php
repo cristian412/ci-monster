@@ -91,7 +91,7 @@ class Request_model extends CI_Model {
 		$atributes = '';
 		$style = array();
 
-		if($action=='') $action = URL.'tables/'.$tabla;
+		if($action=='') $action = URL.$tabla;
 
 		################### SE GENERA EL PRIMER ARRAY #############################################################
 		$var = array(
