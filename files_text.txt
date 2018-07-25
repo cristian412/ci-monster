@@ -7,52 +7,50 @@ class XXX extends CI_Controller {
 
 	public function index(){
 		$data['update'] = $this -> Request_model -> update();
-		$data['tabla'] = $tabla = $this->tabla;
+		$data['tabla'] = $this->tabla;
 
 		# SETEAMOS LA LISTA
-		$lista  = $this -> Request_model -> grid($tabla);
+		$lista  = $this -> Request_model -> grid($this->tabla);
 		//unset($lista['columna']['id_juicio']);
 		if( count($lista['contenido'])<10  )
 			$data['li'] = listasimple($lista,'',''); 
 		else
 			$data['li'] = listasimple($lista);
 
-		# SETEAR EL FORMULARIO
-		$fields = $this -> Request_model -> form($tabla,'new');
-		//$fields['nro']['col'] = '1';
-		$formulario = formbasico($fields);
-		$data['modal'] = modal($formulario,'modal_editar');
+		$formulario = $this->formulario($id);
 
-		$data['yield_data'] = $this->load->view('tables/'.$tabla.'/list',$data,true);
+		$data['modal'] = modal($formulario,'modal_editar_item');
+
+		$data['yield_data'] = $this->load->view($this->tabla.'/list',$data,true);
 	    $this->load->view(LAYOUT.'index',$data);	
 	}
-	public function show(){
+	public function show($id){
 		$data['update'] = $this -> Request_model -> update();
-		$data['tabla'] = $tabla = $this->tabla;
-		$id = $this->uri->segment(4);
-		$data['lista']  = $this -> Request_model -> item($tabla,$id);
+		$data['tabla']  = $this->tabla;
+		$data['lista']  = $this -> Request_model -> item($this->tabla,$id);
 
-		# SETEAR EL FORMULARIO
-		$fields = $this -> Request_model -> form($tabla,$id);
-		//$fields['nro']['col'] = '1';
-		$formulario = formbasico($fields);
-		$data['modal'] = modal($formulario,'editar-item');
+		$formulario = $this->formulario($id);
 
-		$data['yield_data'] = $this->load->view('tables/'.$tabla.'/show',$data,true);
+		$data['modal'] = modal($formulario,'modal_editar_item');
+
+		$data['yield_data'] = $this->load->view($this->tabla.'/show',$data,true);
 		$this->load->view(LAYOUT.'index',$data);
 	}
-	public function edit(){
-		$data['tabla'] = $tabla = $this->tabla;
-		$id = $this->uri->segment(4);
+	public function edit($id){
+		$data['tabla'] = $this->tabla;
 		if (empty($id)) $id = 'new';
-		
-		$fields = $this -> Request_model -> form($tabla,$id);
+
+		$data['formulario'] = $this->formulario($id);
+
+		$data['yield_data'] = $this->load->view($this->tabla.'/edit',$data,true);
+		$this->load->view(LAYOUT.'index',$data);
+	}
+	private function formulario($id){
+		$fields = $this -> Request_model -> form($this->tabla,$id);
 		# SETEAR EL FORMULARIO
 		//$fields['nro']['col'] = '1';
-		$data['formulario'] = formbasico($fields);
+		return formbasico($fields);
 
-		$data['yield_data'] = $this->load->view('tables/'.$tabla.'/edit',$data,true);
-		$this->load->view(LAYOUT.'index',$data);
 	}
 }
 
@@ -78,8 +76,8 @@ class XXX extends CI_Controller {
 <?=$update?>
 <h1>
 	List <?=ucwords($tabla)?>
-	<a href='#' class='btn btn-success' data-toggle='modal' data-target='#modal_editar'>Agregar con Modal</a>
-	<a href="<?=URL.'tables/'.$tabla.'/edit/new'?>" class='btn btn-success'>Agregar</a>
+	<a href='#' class='btn btn-success' data-toggle='modal' data-target='#modal_editar_item'>Agregar con Modal</a>
+	<a href="<?=URL.$tabla.'/edit/new'?>" class='btn btn-success'>Agregar</a>
 </h1>
 
 <?=$li?>
@@ -94,7 +92,7 @@ foreach ($lista as $key => $value) $$key = $value;
 ?>
 <?=$update?>
 <h1>Show <?=ucwords( $tabla ) ?> 
-	<a href='#' class='btn btn-success' data-toggle='modal' data-target='#editar-item'>Editar</a>
+	<a href='#' class='btn btn-success' data-toggle='modal' data-target='#modal_editar_item'>Editar</a>
 </h1>
 
 <?=pre($lista)?>
