@@ -17,7 +17,7 @@ class XXX extends CI_Controller {
 		else
 			$data['li'] = listasimple($lista);
 
-		$formulario = $this->formulario($id);
+		$formulario = $this->formulario('new');
 
 		$data['modal'] = modal($formulario,'modal_editar_item');
 
