@@ -112,7 +112,7 @@ function formbasico($fields,$id_dom=''){
   if($id_dom == '') $id_dom = $tabla;
 
   $result = "<div class='row'>
-  <form class='form' enctype='multipart/form-data' action='$action' method='post' id='{$id_dom}_form' >";
+  <form class='form' enctype='multipart/form-data' action='$action' method='post' id='{$id_dom}_form' accept-charset='utf-8' >";
       foreach ($fields as $v):
         
         #### CREA LAS VARIABLES INDIVIDUALES 
