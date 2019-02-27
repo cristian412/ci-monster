@@ -290,10 +290,17 @@ class Request_model extends CI_Model {
 		$q = "SELECT COLUMN_NAME,DATA_TYPE,COLUMN_KEY
 		FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = '".DATABASE."' and TABLE_NAME = '$tabla'";
 		$t = $this->db->query($q)->result();
+		
+		$q = "SELECT TABLE_COMMENT FROM INFORMATION_SCHEMA.TABLES
+		WHERE table_schema = '".DATABASE."' and TABLE_NAME = '$tabla'";
+		$tcomment = $this->db->query($q)->result();
 		#############################################################################################
 
 		#4 empezamos a crear el query con el seteo inicial y el recorrido del array $t
 		$q = 'SELECT ';
+		$q.= 'concat(\'<a href="'. URL . $tabla . '/show/\', id_'.$tabla.' , 
+		\'" class="btn btn-link btn-xs">&#x1F4C2;</a>\') as abrir, ';
+		
 		$from = ' FROM '.$tabla.' ';
 
 		foreach ($t as $key => $value):
@@ -355,9 +362,9 @@ class Request_model extends CI_Model {
 
 			$col[$colName] = $arr;			
 
-			if( $key == $count_t ){
-				$col['editar'] = ["label"=>'✎',"name"=>'editar',"width"=>'20'];
-				$title['editar'] = '✎';
+			//if( $key == $count_t ){
+			//	$col['editar'] = ["label"=>'✎',"name"=>'editar',"width"=>'20'];
+			//	$title['editar'] = '✎';
 			}
 		/*
         {name:'invid',index:'invid', width:55, sorttype:'int'}, 
@@ -390,16 +397,16 @@ class Request_model extends CI_Model {
 
 		*/ 
 
-		for ($i=0; $i <count($r); $i++) { 
-			$reg = $r[$i];
-	        $id = $r[$i]['id_'.$tabla];
-		    $abrir  = ['abrir'=> '<a href="'.$path.'/show/'.$id.'" class="btn btn-link btn-xs">📂</a>'];
-		    $editar = ['editar'=> '<a href="'.$path.'/edit/'.$id.'">✎</a>'];
+		//for ($i=0; $i <count($r); $i++) { 
+		//	$reg = $r[$i];
+	        //$id = $r[$i]['id_'.$tabla];
+		//    $abrir  = ['abrir'=> '<a href="'.$path.'/show/'.$id.'" class="btn btn-link btn-xs">📂</a>'];
+		//    $editar = ['editar'=> '<a href="'.$path.'/edit/'.$id.'">✎</a>'];
 
-			$reg = $abrir+$reg;				
-			$reg = $reg+$editar;
-			$r[$i] = $reg;
-		}
+		//	$reg = $abrir+$reg;				
+		//	$reg = $reg+$editar;
+		//	$r[$i] = $reg;
+		//}
 		//pre($q);
 
 		$return['meta']['tabla'] = $tabla;
