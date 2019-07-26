@@ -365,7 +365,7 @@ class Request_model extends CI_Model {
 			//if( $key == $count_t ){
 			//	$col['editar'] = ["label"=>'✎',"name"=>'editar',"width"=>'20'];
 			//	$title['editar'] = '✎';
-			}
+			//}
 		/*
         {name:'invid',index:'invid', width:55, sorttype:'int'}, 
         {name:'invdate',index:'invdate', width:90, sorttype:'date', datefmt:'Y-m-d'}, 
