@@ -22,7 +22,8 @@ class Users extends CI_Controller {
 		$this->load->view('layout/adminlte/sign_in',$data);
 	}
 	public function sign_in(){
-		$data['login_url'] = $this->googleplus->loginURL();
+		//$data['login_url'] = $this->googleplus->loginURL();
+		$data['login_url'] = '';
 		$data['message'] = '';
 		$this->load->view('layout/adminlte/sign_in',$data);
 
@@ -32,7 +33,7 @@ class Users extends CI_Controller {
 	}
 	public function sign_out(){
 		$this->session->sess_destroy();
-		$this->googleplus->revokeToken();
+		//$this->googleplus->revokeToken();
 		redirect( URL.'users/sign_in' );
 	}
 
