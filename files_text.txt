@@ -86,8 +86,12 @@ class XXX extends CI_Controller {
 
 &&&<?php
 ###### SHOW ######
-
-foreach ($lista as $key => $value) $$key = $value;
+$li = '';
+foreach ($lista as $key => $value){
+	$$key = $value;
+	$li.=' <span class="badge badge-light" style="width:200px" >'.ucwords(str_replace('_',' ',$key)).'</span>';
+	$li.=' <input disabled value="'.$value.'"  style="width:200px" ><br>';
+}
 
 ?>
 <?=$update?>
@@ -95,6 +99,7 @@ foreach ($lista as $key => $value) $$key = $value;
 	<a href='#' class='btn btn-success' data-toggle='modal' data-target='#modal_editar_item'>Editar</a>
 </h1>
 
-<?=pre($lista)?>
+<?=$li?>
+
 
 <?=$modal?>
