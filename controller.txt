@@ -6,26 +6,33 @@ class XXX extends CI_Controller {
 	private $tabla = 'xxx';
 
 	public function index(){
-		$data['update'] = $this -> Request_model -> update();
-		$data['fields'] = $this -> Request_model -> form($this->tabla,'new',URL.$this->tabla);
+		$data['formulario'] = $this->formulario($this->tabla,'new');
 		$data['lista']  = $this -> Request_model -> grid($this->tabla);
-		$data['yield_data'] = $this->load->view('tables/'.$this->tabla.'/list',$data,true);
-	    $this->load->view('layout/adminlte/index',$data);	
+		$data['yield_data'] = $this->load->view($this->tabla.'/list',$data,true);
+		$this->load->view('layout/index',$data);	
 	}
-	public function show(){
-		$id = $this->uri->segment(3);
-		$data['update'] = $this -> Request_model -> update();
+	public function show($id){
 		$data['fields'] = $this -> Request_model -> form($this->tabla,$id);
 		$data['lista']  = $this -> Request_model -> item($this->tabla,$id);
-		$data['yield_data'] = $this->load->view('tables/'.$this->tabla.'/show',$data,true);
-		$this->load->view('layout/adminlte/index',$data);
+		$data['yield_data'] = $this->load->view($this->tabla.'/show',$data,true);
+		$this->load->view('layout/index',$data);
 	}
-	public function edit(){
-		$id = $this->uri->segment(3);
-		if(empty($id)) $id = 'new';
-		$data['fields'] = $this -> Request_model -> form($this->tabla,$id);
-		$data['yield_data'] = $this->load->view('tables/'.$this->tabla.'/edit',$data,true);
-		$this->load->view('layout/adminlte/index',$data);
+	public function edit($id='new'){
+		$data['formulario'] = $this->formulario($this->tabla,$id);
+		$data['yield_data'] = $this->load->view($this->tabla.'/edit',$data,true);
+		$this->load->view('layout/index',$data);
 	}
-
+	public function update($data){
+		if ( ! $this->session->has_userdata('id_users') and !isset($_POST['action']) )
+			redirect( URL.'users/sign_in' );
+		$action = $_POST['action'];
+		$re = $this -> Request_model -> update();
+		$this->session->set_flashdata('update', $re );
+		redirect($action);
+	}
+	private function formulario($id='new'){
+		$fields = $this -> Request_model -> form($this->tabla,$id);
+		return listasimple($fields);
+	}
+	
 }
