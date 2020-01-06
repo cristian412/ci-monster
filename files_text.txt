@@ -6,10 +6,10 @@ class XXX extends CI_Controller {
 	private $tabla = 'xxx';
 
 	public function index(){
-		$data['formulario'] = $this->formulario($this->tabla,'new');
-		$data['lista']  = $this -> Request_model -> grid($this->tabla);
+		$data['li'] = listaSimple($this -> Request_model -> grid($this->tabla));
+		$data['modal'] = modal($this->formulario('new'),'modal_editar_item');
 		$data['yield_data'] = $this->load->view($this->tabla.'/list',$data,true);
-		$this->load->view('layout/index',$data);	
+		$this->load->view('layout/index',$data);
 	}
 	public function show($id){
 		$data['fields'] = $this -> Request_model -> form($this->tabla,$id);
@@ -32,7 +32,7 @@ class XXX extends CI_Controller {
 	}
 	private function formulario($id='new'){
 		$fields = $this -> Request_model -> form($this->tabla,$id);
-		return listasimple($fields);
+		return formbasico($fields);
 	}
 
 }
