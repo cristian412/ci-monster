@@ -12,13 +12,13 @@ class XXX extends CI_Controller {
 		$this->load->view('layout/index',$data);
 	}
 	public function show($id){
-		$data['fields'] = $this -> Request_model -> form($this->tabla,$id);
+		$data['modal'] = modal($this->formulario($id),'modal_editar_item');
 		$data['lista']  = $this -> Request_model -> item($this->tabla,$id);
 		$data['yield_data'] = $this->load->view($this->tabla.'/show',$data,true);
 		$this->load->view('layout/index',$data);
 	}
 	public function edit($id='new'){
-		$data['formulario'] = $this->formulario($this->tabla,$id);
+		$data['formulario'] = $this->formulario($id);
 		$data['yield_data'] = $this->load->view($this->tabla.'/edit',$data,true);
 		$this->load->view('layout/index',$data);
 	}
