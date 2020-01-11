@@ -43,7 +43,8 @@ class XXX extends CI_Controller {
 
 ?>
 
-<h1>Edit <?=ucwords($tabla)?></h1>
+<h1>Edit <?=$this->uri->segment(1)?></h1>
+
 <?=$formulario?>
 
 <!--
@@ -57,16 +58,17 @@ class XXX extends CI_Controller {
 &&&<?php
 ###### LIST ######
 ?>
-<?=$update?>
+<?= !isset($update) ? '' : $update ;?>
+
 <h1>
-	List <?=ucwords($tabla)?>
+	List <?=$this->uri->segment(1)?>
 	<a href='#' class='btn btn-success' data-toggle='modal' data-target='#modal_editar_item'>Agregar con Modal</a>
-	<a href="<?=URL.$tabla.'/edit/new'?>" class='btn btn-success'>Agregar</a>
+	<a href="<?=URL.$this->uri->segment(1)?>.'/edit/new'?>" class='btn btn-success'>Agregar</a>
 </h1>
 
-<?=$li?>
+<?= !isset($li) ? '' : $li ;?>
 
-<?=$modal?>
+<?= !isset($modal) ? '' : $modal ;?>
 
 &&&<?php
 ###### SHOW ######
@@ -78,12 +80,12 @@ foreach ($lista as $key => $value){
 }
 
 ?>
-<?=$update?>
-<h1>Show <?=ucwords( $tabla ) ?> 
+<?= !isset($update) ? '' : $update ;?>
+
+<h1>Show <?=$this->uri->segment(1)?> 
 	<a href='#' class='btn btn-success' data-toggle='modal' data-target='#modal_editar_item'>Editar</a>
 </h1>
 
-<?=$li?>
+<?= !isset($li) ? '' : $li ;?>
 
-
-<?=$modal?>
+<?= !isset($modal) ? '' : $modal ;?>
