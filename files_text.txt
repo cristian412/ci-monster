@@ -70,7 +70,7 @@ class XXX extends CI_Controller {
 <h1>
 	List <?=$this->uri->segment(1)?>
 	<a href='#' class='btn btn-success' data-toggle='modal' data-target='#modal_editar_item'>Agregar con Modal</a>
-	<a href="<?=URL.$this->uri->segment(1)?>.'/edit/new'?>" class='btn btn-success'>Agregar</a>
+	<a href="<?=URL.$this->uri->segment(1)?>'/edit/new" class='btn btn-success'>Agregar</a>
 </h1>
 
 <?= !isset($li) ? '' : $li ;?>
