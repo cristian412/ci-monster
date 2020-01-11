@@ -22,11 +22,18 @@ class XXX extends CI_Controller {
 		$data['yield_data'] = $this->load->view($this->tabla.'/edit',$data,true);
 		$this->load->view('layout/index',$data);
 	}
-	public function update($data){
+	public function update($data=[]){
 		if ( ! $this->session->has_userdata('id_users') and !isset($_POST['action']) )
 			redirect( URL.'users/sign_in' );
-		$action = $_POST['action'];
-		$re = $this -> Request_model -> update();
+		if(isset($_POST['action'])){
+			$action = $_POST['action'];
+			$re = $this -> Request_model -> update();
+		}else{
+			if(!empty($data)){
+				$action = $data['action'];
+				$re = $this -> Request_model -> update($data);			
+			}
+		}
 		$this->session->set_flashdata('update', $re );
 		redirect($action);
 	}
