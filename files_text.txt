@@ -27,11 +27,11 @@ class XXX extends CI_Controller {
 			redirect( URL.'users/sign_in' );
 		if(isset($_POST['action'])){
 			$action = $_POST['action'];
-			$re = $this -> Request_model -> update();
+			$re = $this -> Update_model -> update();
 		}else{
 			if(!empty($data)){
 				$action = $data['action'];
-				$re = $this -> Request_model -> update($data);			
+				$re = $this -> Update_model -> update($data);			
 			}
 		}
 		$this->session->set_flashdata('update', $re );
