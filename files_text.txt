@@ -50,7 +50,8 @@ class XXX extends CI_Controller {
 
 ?>
 
-<h1>Edit <?=$this->uri->segment(1)?></h1>
+<h1>Editar <?=ucwords( str_replace('_', ' ',$this->uri->segment(1)) )?></h1>
+<hr>
 
 <?=$formulario?>
 
