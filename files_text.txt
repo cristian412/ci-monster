@@ -69,9 +69,9 @@ class XXX extends CI_Controller {
 <?= !isset($update) ? '' : $update ;?>
 
 <h1>
-	List <?=$this->uri->segment(1)?>
+	Lista <?=ucwords(str_replace('_',' ', $this->uri->segment(1)))?>
 	<a href='#' class='btn btn-success' data-toggle='modal' data-target='#modal_editar_item'>Agregar con Modal</a>
-	<a href="<?=URL.$this->uri->segment(1)?>/edit/new" class='btn btn-success'>Agregar</a>
+	<a href="<?=URL.$this->uri->segment(1)?>/edit/new" class='btn btn-primary'>Agregar en ventana</a>
 </h1>
 
 <?= !isset($li) ? '' : $li ;?>
@@ -90,7 +90,7 @@ foreach ($lista as $key => $value){
 ?>
 <?= !isset($update) ? '' : $update ;?>
 
-<h1>Show <?=$this->uri->segment(1)?> 
+<h1>Mostrar <?=ucwords(str_replace('_',' ', $this->uri->segment(1)))?>
 	<a href='#' class='btn btn-success' data-toggle='modal' data-target='#modal_editar_item'>Editar</a>
 </h1>
 
