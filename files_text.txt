@@ -48,9 +48,11 @@ class XXX extends CI_Controller {
 &&&<?php
 ###### EDIT ######
 
-?>
 
-$title = 'Editar'.ucwords( str_replace('_', ' ',$this->uri->segment(1)) ).'</h1>';
+
+$title = 'Editar '.ucwords( str_replace('_', ' ',$this->uri->segment(1)) );
+
+?>
 
 <?=cardprimary($title,$formulario);?>
 
