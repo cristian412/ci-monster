@@ -50,10 +50,9 @@ class XXX extends CI_Controller {
 
 ?>
 
-<h1>Editar <?=ucwords( str_replace('_', ' ',$this->uri->segment(1)) )?></h1>
-<hr>
+$title = 'Editar'.ucwords( str_replace('_', ' ',$this->uri->segment(1)) ).'</h1>';
 
-<?=$formulario?>
+<?=cardprimary($title,$formulario);?>
 
 <!--
 <script src="//cdn.ckeditor.com/4.7.0/full/ckeditor.js"></script>
