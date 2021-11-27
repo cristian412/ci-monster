@@ -6,18 +6,21 @@ class XXX extends CI_Controller {
 	private $tabla = 'xxx';
 
 	public function index(){
+		$data['update'] = $this -> Request_model -> update();
 		$data['li'] = listaSimple($this -> Request_model -> grid($this->tabla));
 		$data['modal'] = modal($this->formulario('new'),'modal_editar_item');
 		$data['yield_data'] = $this->load->view($this->tabla.'/list',$data,true);
 		$this->load->view('layout/index',$data);
 	}
 	public function show($id){
+		$data['update'] = $this -> Request_model -> update();
 		$data['modal'] = modal($this->formulario($id),'modal_editar_item');
 		$data['lista']  = $this -> Request_model -> item($this->tabla,$id);
 		$data['yield_data'] = $this->load->view($this->tabla.'/show',$data,true);
 		$this->load->view('layout/index',$data);
 	}
 	public function edit($id='new'){
+		$data['update'] = $this -> Request_model -> update();
 		$data['formulario'] = $this->formulario($id);
 		$data['yield_data'] = $this->load->view($this->tabla.'/edit',$data,true);
 		$this->load->view('layout/index',$data);
